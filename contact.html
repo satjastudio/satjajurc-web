@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact — Satja Jurc</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Abel&display=block" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@1,700&display=block" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="topbar-page contact-page">
+
+  <header class="topbar">
+    <a href="index.html" class="site-name"><img src="images/name-logo-v2-cropped.png" alt="Satja Jurc" class="site-name-img"></a>
+
+    <div class="topbar-menu">
+      <nav class="topbar-nav">
+        <a href="index.html">Home</a>
+        <a href="painting.html">Work</a>
+        <a href="furniture-design.html">Furniture</a>
+        <a href="cv.html">About</a>
+        <a href="contact.html" class="active">Contact</a>
+      </nav>
+      <a href="https://www.instagram.com/forbidden_mantra" target="_blank" rel="noopener" class="topbar-instagram" aria-label="Instagram">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+        </svg>
+      </a>
+    </div>
+
+    <div class="topbar-actions">
+      <a href="https://www.instagram.com/forbidden_mantra" target="_blank" rel="noopener" class="topbar-instagram topbar-instagram-bar" aria-label="Instagram">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+        </svg>
+      </a>
+      <button class="nav-toggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile-only menu overlay: white panel (~top 80vh) with a close X
+       and the nav links, dimmed page content below it (~bottom 20vh).
+       Fully covers the topbar (logo/instagram/hamburger) while open —
+       see css/style.css's max-width: 700px #mobileMenuOverlay rules and
+       js/main.js's nav-toggle IIFE (toggles this element's .open class
+       alongside .topbar's). -->
+  <div class="mobile-menu-overlay" id="mobileMenuOverlay" aria-hidden="true">
+    <div class="mobile-menu-panel">
+      <button class="mobile-menu-close" aria-label="Close menu">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <nav class="mobile-menu-nav">
+        <a href="index.html">Home</a>
+        <a href="painting.html">Work</a>
+        <a href="furniture-design.html">Furniture</a>
+        <a href="cv.html">About</a>
+        <a href="contact.html" class="active">Contact</a>
+      </nav>
+    </div>
+    <div class="mobile-menu-dim"></div>
+  </div>
+
+  <main class="content">
+    <div class="contact-wrap">
+      <div class="contact-inner">
+        <a href="mailto:studio@satjajurc.com">Email: studio@satjajurc.com</a>
+        <a href="https://www.instagram.com/forbidden_mantra" target="_blank" rel="noopener">Instagram: @forbidden_mantra</a>
+      </div>
+
+      <div class="subscribe-block">
+        <p class="subscribe-text">Subscribe to the mailing list for news about upcoming shows and new available paintings.</p>
+
+        <!-- TODO: connect to mailing service — Mailchimp/Buttondown/etc —
+             this form currently only validates client-side and does not
+             store or send submissions anywhere. See the matching TODO in
+             js/main.js's "Subscribe form" handler. -->
+        <!-- novalidate removed and type="text" (not "email") used
+             deliberately: with type="email" + required and no novalidate,
+             the browser's own constraint validation blocks the submit
+             event entirely for BOTH an empty field and a badly-formatted
+             one, showing its own native message for each case and never
+             letting our JS submit handler run — that would swallow the
+             custom "Please enter a valid email address!" alert the format
+             check below is supposed to produce. type="text" leaves only
+             the "required" (empty-field) constraint natively active;
+             format checking is left entirely to the JS handler.
+             inputmode="email" keeps the mobile "@"-keyboard hint that
+             type="email" would otherwise have provided. -->
+        <form class="subscribe-form" id="subscribeForm">
+          <div class="subscribe-field">
+            <label for="subscribeEmail">Email *</label>
+            <input type="text" inputmode="email" id="subscribeEmail" name="email" autocomplete="email" required>
+          </div>
+          <button type="submit" class="subscribe-btn">Subscribe</button>
+        </form>
+
+        <p class="subscribe-success" id="subscribeSuccess" hidden>Thanks for subscribing!</p>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

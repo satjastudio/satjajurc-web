@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painting — Satja Jurc</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Abel&display=block" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@1,700&display=block" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="topbar-page painting-page">
+
+  <header class="topbar">
+    <a href="index.html" class="site-name"><img src="images/name-logo-v2-cropped.png" alt="Satja Jurc" class="site-name-img"></a>
+
+    <div class="topbar-menu">
+      <nav class="topbar-nav">
+        <a href="index.html">Home</a>
+        <a href="painting.html" class="active">Work</a>
+        <a href="furniture-design.html">Furniture</a>
+        <a href="cv.html">About</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <a href="https://www.instagram.com/forbidden_mantra" target="_blank" rel="noopener" class="topbar-instagram" aria-label="Instagram">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+        </svg>
+      </a>
+    </div>
+
+    <div class="topbar-actions">
+      <a href="https://www.instagram.com/forbidden_mantra" target="_blank" rel="noopener" class="topbar-instagram topbar-instagram-bar" aria-label="Instagram">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+        </svg>
+      </a>
+      <button class="nav-toggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile-only menu overlay: white panel (~top 80vh) with a close X
+       and the nav links, dimmed page content below it (~bottom 20vh).
+       Fully covers the topbar (logo/instagram/hamburger) while open —
+       see css/style.css's max-width: 700px #mobileMenuOverlay rules and
+       js/main.js's nav-toggle IIFE (toggles this element's .open class
+       alongside .topbar's). -->
+  <div class="mobile-menu-overlay" id="mobileMenuOverlay" aria-hidden="true">
+    <div class="mobile-menu-panel">
+      <button class="mobile-menu-close" aria-label="Close menu">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <nav class="mobile-menu-nav">
+        <a href="index.html">Home</a>
+        <a href="painting.html" class="active">Work</a>
+        <a href="furniture-design.html">Furniture</a>
+        <a href="cv.html">About</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+    <div class="mobile-menu-dim"></div>
+  </div>
+
+  <main class="content">
+
+    <div class="series-landing" id="series-landing">
+
+      <section class="series-section" data-series="eternal-sunshine">
+        <h2 class="series-heading">Eternal Sunshine</h2>
+        <div class="series-grid">
+          <div class="series-col">
+            <div class="series-item"
+                 data-order="1"
+                 data-src="images/eternal-sunshine-01.jpg"
+                 data-title="There Is No Place Like Home"
+                 data-year="2025"
+                 data-medium="Oil / pastel / acrylic / paper mâché / newspaper on burnt wood"
+                 data-dimensions="70 × 40 × 30 cm">
+              <img src="images/eternal-sunshine-01.jpg" alt="There Is No Place Like Home">
+            </div>
+            <div class="series-item"
+                 data-order="3"
+                 data-src="images/eternal-sunshine-03.jpg"
+                 data-title="Peaches I"
+                 data-year="2025"
+                 data-medium="Oil / pastel / acrylic on wood"
+                 data-dimensions="120 × 60 × 30 cm">
+              <img src="images/eternal-sunshine-03.jpg" alt="Peaches I">
+            </div>
+            <div class="series-item"
+                 data-order="5"
+                 data-src="images/eternal-sunshine-05.jpg"
+                 data-title="Peaches II"
+                 data-year="2025"
+                 data-medium="Oil / pastel / acrylic on wood"
+                 data-dimensions="150 × 150 cm">
+              <img src="images/eternal-sunshine-05.jpg" alt="Peaches II">
+            </div>
+            <div class="series-item"
+                 data-order="7"
+                 data-src="images/eternal-sunshine-07.jpg"
+                 data-title="Babygirl It's Just Me and You"
+                 data-year="2025"
+                 data-medium="Mixed media on wood"
+                 data-dimensions="60 × 60 cm">
+              <img src="images/eternal-sunshine-07.jpg" alt="Babygirl It's Just Me and You">
+            </div>
+            <div class="series-item"
+                 data-order="9"
+                 data-src="images/eternal-sunshine-09.jpg"
+                 data-title="Landscape I"
+                 data-year="2021"
+                 data-medium="Oil on canvas"
+                 data-dimensions="130 × 100 cm">
+              <img src="images/eternal-sunshine-09.jpg" alt="Landscape I">
+            </div>
+          </div>
+          <div class="series-col">
+            <div class="series-item"
+                 data-order="2"
+                 data-src="images/eternal-sunshine-02-main.jpg"
+                 data-detail-src="images/eternal-sunshine-02.jpg"
+                 data-title="Alf"
+                 data-year="2025"
+                 data-medium="Oil / pastel / acrylic / paper mâché / newspaper on wood"
+                 data-dimensions="2 × 3 m">
+              <img src="images/eternal-sunshine-02-main.jpg" alt="Alf">
+            </div>
+            <div class="series-item"
+                 data-order="4"
+                 data-src="images/eternal-sunshine-04.jpg"
+                 data-title="Evil Mr. CAT"
+                 data-year="2025"
+                 data-medium="Oil / pastel / paper / acrylic on wood"
+                 data-dimensions="150 × 150 cm">
+              <img src="images/eternal-sunshine-04.jpg" alt="Evil Mr. CAT">
+            </div>
+            <div class="series-item"
+                 data-order="6"
+                 data-src="images/eternal-sunshine-06.jpg"
+                 data-title="Brighter Days Ahead"
+                 data-year="2025"
+                 data-medium="Oil / pastel / acrylic on wood"
+                 data-dimensions="120 × 150 cm">
+              <img src="images/eternal-sunshine-06.jpg" alt="Brighter Days Ahead">
+            </div>
+            <div class="series-item"
+                 data-order="8"
+                 data-src="images/eternal-sunshine-08.jpg"
+                 data-title="PUG"
+                 data-year="2025"
+                 data-medium="Oil / pastel / acrylic on wood"
+                 data-dimensions="70 × 170 cm">
+              <img src="images/eternal-sunshine-08.jpg" alt="PUG">
+            </div>
+            <div class="series-item"
+                 data-order="10"
+                 data-src="images/eternal-sunshine-10.jpg"
+                 data-title="Untitled V"
+                 data-year="2021"
+                 data-medium="Oil on canvas"
+                 data-dimensions="100 × 75 cm">
+              <img src="images/eternal-sunshine-10.jpg" alt="Untitled V">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="series-section" data-series="beginning-of-the-end">
+        <h2 class="series-heading">The Beginning of the End</h2>
+        <div class="series-grid">
+
+          <!-- Row 1: 3 equal columns -->
+          <div class="row-3col">
+            <div class="series-item"
+                 data-order="1"
+                 data-src="images/beginning-of-the-end-01.jpg"
+                 data-title="Untitled I"
+                 data-year="2024"
+                 data-medium="Fire torch on steel plate"
+                 data-dimensions="45 × 65 cm (framed)">
+              <img src="images/beginning-of-the-end-01.jpg" alt="Untitled I">
+            </div>
+            <div class="series-item"
+                 data-order="2"
+                 data-src="images/beginning-of-the-end-02.jpg"
+                 data-title="Redeeming an Old Debt of the Sun"
+                 data-year="2024"
+                 data-medium="Fire torch on steel plate"
+                 data-dimensions="35 × 35 cm">
+              <img src="images/beginning-of-the-end-02.jpg" alt="Redeeming an Old Debt of the Sun">
+            </div>
+            <div class="series-item"
+                 data-order="3"
+                 data-src="images/beginning-of-the-end-03.jpg"
+                 data-title="Miracula"
+                 data-year="2024"
+                 data-medium="Oil & spirits on wood"
+                 data-dimensions="35 × 35 cm">
+              <img src="images/beginning-of-the-end-03.jpg" alt="Miracula">
+            </div>
+          </div>
+
+          <!-- Row 2: 2 columns, right larger — left stacks 3 (4,5,6), right stacks 2 (7,8) -->
+          <div class="row-split">
+            <div class="split-col">
+              <div class="series-item"
+                   data-order="4"
+                   data-src="images/beginning-of-the-end-04.jpg"
+                   data-title="Umi"
+                   data-year="2024"
+                   data-medium="Oil & spirits on wood"
+                   data-dimensions="35 × 35 cm (60 × 60 cm framed)">
+                <img src="images/beginning-of-the-end-04.jpg" alt="Umi">
+              </div>
+              <div class="series-item"
+                   data-order="5"
+                   data-src="images/beginning-of-the-end-05.jpg"
+                   data-title="Umami"
+                   data-year="2024"
+                   data-medium="Oil & spirits on wood"
+                   data-dimensions="35 × 35 cm (60 × 60 cm framed)">
+                <img src="images/beginning-of-the-end-05.jpg" alt="Umami">
+              </div>
+              <div class="series-item"
+                   data-order="6"
+                   data-src="images/beginning-of-the-end-06.jpg"
+                   data-title="Massa Confusa"
+                   data-year="2024"
+                   data-medium="Oil & spirits on wood"
+                   data-dimensions="35 × 35 cm (60 × 60 cm framed)">
+                <img src="images/beginning-of-the-end-06.jpg" alt="Massa Confusa">
+              </div>
+            </div>
+            <div class="split-col col-large">
+              <div class="series-item"
+                   data-order="7"
+                   data-src="images/beginning-of-the-end-07.jpg"
+                   data-title="The Beginning of the End"
+                   data-year="2024"
+                   data-medium="Oil on wood & blue metal patina on brass"
+                   data-dimensions="170 × 75 × 34 cm">
+                <img src="images/beginning-of-the-end-07.jpg" alt="The Beginning of the End">
+              </div>
+              <div class="series-item"
+                   data-order="8"
+                   data-src="images/beginning-of-the-end-08.jpg"
+                   data-title="RA"
+                   data-year="2025"
+                   data-medium="Blow torch on copper plate"
+                   data-dimensions="50 × 50 cm">
+                <img src="images/beginning-of-the-end-08.jpg" alt="RA">
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 3: 3 equal columns -->
+          <div class="row-3col">
+            <div class="series-item"
+                 data-order="9"
+                 data-src="images/beginning-of-the-end-09.jpg"
+                 data-title="Ignis Gehennalis"
+                 data-year="2024"
+                 data-medium="Oil & spirits on wood"
+                 data-dimensions="35 × 35 cm">
+              <img src="images/beginning-of-the-end-09.jpg" alt="Ignis Gehennalis">
+            </div>
+            <div class="series-item"
+                 data-order="10"
+                 data-src="images/beginning-of-the-end-10.jpg"
+                 data-title="Sublimatio"
+                 data-year="2024"
+                 data-medium="Oil & spirits on wood"
+                 data-dimensions="35 × 35 cm">
+              <img src="images/beginning-of-the-end-10.jpg" alt="Sublimatio">
+            </div>
+            <div class="series-item"
+                 data-order="11"
+                 data-src="images/beginning-of-the-end-11.jpg"
+                 data-title="No Name"
+                 data-year="2024"
+                 data-medium="Fire torch on steel plate"
+                 data-dimensions="45 × 65 cm">
+              <img src="images/beginning-of-the-end-11.jpg" alt="No Name">
+            </div>
+          </div>
+
+          <!-- Row 4: 3 equal columns -->
+          <div class="row-3col">
+            <div class="series-item"
+                 data-order="12"
+                 data-src="images/beginning-of-the-end-12.jpg"
+                 data-title="Tide"
+                 data-year="2024"
+                 data-medium="Oil & spirits on wood"
+                 data-dimensions="35 × 35 cm">
+              <img src="images/beginning-of-the-end-12.jpg" alt="Tide">
+            </div>
+            <div class="series-item"
+                 data-order="13"
+                 data-src="images/beginning-of-the-end-13.jpg"
+                 data-title="Coralline"
+                 data-year="2024"
+                 data-medium="Oil & spirits on canvas"
+                 data-dimensions="35 × 35 cm">
+              <img src="images/beginning-of-the-end-13.jpg" alt="Coralline">
+            </div>
+            <div class="series-item"
+                 data-order="14"
+                 data-src="images/beginning-of-the-end-14.jpg"
+                 data-title="Untitled II"
+                 data-year="2024"
+                 data-medium="Fire torch on copper plate"
+                 data-dimensions="12 × 15 cm">
+              <img src="images/beginning-of-the-end-14.jpg" alt="Untitled II">
+            </div>
+          </div>
+
+          <!-- Row 5: 2 columns, left larger -->
+          <div class="row-2col">
+            <div class="series-item item-large"
+                 data-order="15"
+                 data-src="images/beginning-of-the-end-15.jpg"
+                 data-title="Three and a Half Days I, II, III, IV"
+                 data-year="2024"
+                 data-medium="Four metal plates (2 copper, 2 steel)"
+                 data-dimensions="120 × 40 cm">
+              <img src="images/beginning-of-the-end-15.jpg" alt="Three and a Half Days I, II, III, IV">
+            </div>
+            <div class="series-item"
+                 data-order="16"
+                 data-src="images/beginning-of-the-end-16.jpg"
+                 data-title="Athanor"
+                 data-year="2025"
+                 data-medium="Coral on metal frame"
+                 data-dimensions="60 × 90 cm">
+              <img src="images/beginning-of-the-end-16.jpg" alt="Athanor">
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Small centered logo mark, once at the very end of the page —
+           after both series, not repeated per section. Reuses
+           .furniture-endmark (same style/size as furniture-design.html's
+           grid); grid-column in that rule is inert here since this
+           parent isn't a grid, everything else (width/aspect-ratio/
+           margin:auto centering) still applies normally. -->
+      <div class="furniture-endmark">
+        <img src="images/logo-mark.png" alt="Satja Jurc logo mark">
+      </div>
+
+    </div>
+
+    <div class="gallery-detail" id="gallery-detail">
+      <div class="detail-left">
+        <div class="thumb-col"></div>
+        <div class="detail-nav">
+          <button class="nav-arrow nav-prev"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+          <button class="nav-close"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+          <button class="nav-arrow nav-next"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></button>
+        </div>
+      </div>
+      <div class="detail-main">
+        <div class="detail-img-wrap">
+          <img class="detail-img" src="" alt="">
+        </div>
+        <div class="detail-info">
+          <p class="detail-title"></p>
+          <p class="detail-meta detail-year"></p>
+          <p class="detail-meta detail-medium"></p>
+          <p class="detail-meta detail-dimensions"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile-only fullscreen image view: tap any image in Eternal
+         Sunshine or Beginning of the End's single-column mobile stacks to
+         open it here — topbar hidden, image full-width/contained, caption
+         below, single back arrow to return to the same scroll position.
+         Fully separate from the shared #gallery-detail viewer above
+         (desktop's lightbox/viewer code, untouched) — one shared instance,
+         populated per-tap by js/main.js from whichever .series-item was
+         tapped (same data-src/title/year/medium/dimensions attributes the
+         shared viewer reads). Caption reuses .detail-title/.detail-meta so
+         it matches the shared viewer's caption styling. Styling lives in
+         css/style.css's max-width: 700px block only — see
+         #mobileImageView there. -->
+    <div class="mobile-image-view" id="mobileImageView" aria-hidden="true">
+      <button class="mobile-image-view-back" aria-label="Back">
+        <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      </button>
+      <div class="mobile-image-view-img-wrap">
+        <img class="mobile-image-view-img" src="" alt="">
+      </div>
+      <div class="detail-info">
+        <p class="detail-title"></p>
+        <p class="detail-meta"></p>
+        <p class="detail-meta"></p>
+        <p class="detail-meta"></p>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

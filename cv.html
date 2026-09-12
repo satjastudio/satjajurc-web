@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CV — Satja Jurc</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Abel&display=block" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@1,700&display=block" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="topbar-page cv-page">
+
+  <header class="topbar">
+    <a href="index.html" class="site-name"><img src="images/name-logo-v2-cropped.png" alt="Satja Jurc" class="site-name-img"></a>
+
+    <div class="topbar-menu">
+      <nav class="topbar-nav">
+        <a href="index.html">Home</a>
+        <a href="painting.html">Work</a>
+        <a href="furniture-design.html">Furniture</a>
+        <a href="cv.html" class="active">About</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <a href="https://www.instagram.com/forbidden_mantra" target="_blank" rel="noopener" class="topbar-instagram" aria-label="Instagram">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+        </svg>
+      </a>
+    </div>
+
+    <div class="topbar-actions">
+      <a href="https://www.instagram.com/forbidden_mantra" target="_blank" rel="noopener" class="topbar-instagram topbar-instagram-bar" aria-label="Instagram">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+        </svg>
+      </a>
+      <button class="nav-toggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile-only menu overlay: white panel (~top 80vh) with a close X
+       and the nav links, dimmed page content below it (~bottom 20vh).
+       Fully covers the topbar (logo/instagram/hamburger) while open —
+       see css/style.css's max-width: 700px #mobileMenuOverlay rules and
+       js/main.js's nav-toggle IIFE (toggles this element's .open class
+       alongside .topbar's). -->
+  <div class="mobile-menu-overlay" id="mobileMenuOverlay" aria-hidden="true">
+    <div class="mobile-menu-panel">
+      <button class="mobile-menu-close" aria-label="Close menu">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <nav class="mobile-menu-nav">
+        <a href="index.html">Home</a>
+        <a href="painting.html">Work</a>
+        <a href="furniture-design.html">Furniture</a>
+        <a href="cv.html" class="active">About</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+    <div class="mobile-menu-dim"></div>
+  </div>
+
+  <main class="content">
+    <div class="cv-wrap">
+
+      <section class="cv-section">
+        <h2>Education</h2>
+
+        <div class="cv-entry-block">
+          <p class="cv-entry-title">MA Art and Science — University of the Arts London, Central Saint Martins</p>
+          <p class="cv-entry-sub">London, UK · 2023–2025</p>
+          <ul class="cv-entry-list">
+            <li>Grade: Distinction (Honours).</li>
+          </ul>
+        </div>
+
+        <div class="cv-entry-block">
+          <p class="cv-entry-title">BA Fine Arts — Minerva Art Academy, Hanze University of Applied Sciences</p>
+          <p class="cv-entry-sub">Groningen, NL · 2018–2022</p>
+          <ul class="cv-entry-list">
+            <li>Grade: First-Class. Achievements: I realised, as part of my graduation work, an art installation that won two prestigious awards and was featured at renowned festivals, including the Dutch Design Week and the Dutch Innovations Week.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="cv-section">
+        <h2>Professional Experience</h2>
+
+        <div class="cv-entry-block">
+          <p class="cv-entry-title">Lead Artist, Designer and Architect at Oude Kerk Museum Chapel</p>
+          <p class="cv-entry-sub">Amsterdam, NL · Jan 2023 – Jun 2024</p>
+          <ul class="cv-entry-list">
+            <li>Led the design, planning and construction of a new chapel for the oldest Dutch church in Amsterdam — Oude Kerk.</li>
+            <li>Conceptualised and produced a plan for the artistic project, collaborating with Viola Renate, a renowned Dutch artist.</li>
+            <li>Integrated and advocated for sustainable materials (wood and cardboard) and practices throughout the project lifecycle.</li>
+            <li>Directed and managed 6 volunteers who helped build the chapel, administering daily tasks and monitoring performance.</li>
+          </ul>
+        </div>
+
+        <div class="cv-entry-block">
+          <p class="cv-entry-title">Creative Lead — Mind Tree</p>
+          <p class="cv-entry-sub">Amsterdam, NL · Mar 2023 – May 2023</p>
+          <ul class="cv-entry-list">
+            <li>Devised and executed creative strategy for the popular Slovenian jazz band, Mind Tree, for their latest album launch.</li>
+            <li>Created 10 album concept versions as paintings, ultimately developing detailed graphical reproductions through Photoshop.</li>
+            <li>Delivered a high quality work consisting of 5 album cover designs, and a 10-page booklet to accompany the launch of the album.</li>
+          </ul>
+        </div>
+
+        <div class="cv-entry-block">
+          <p class="cv-entry-title">Artist-in-Residence — Maydays Project</p>
+          <p class="cv-entry-sub">Natuurbegraafplas, Friesland, NL · Mar 2023 – May 2023</p>
+          <ul class="cv-entry-list">
+            <li>Worked in collaboration with Dutch artist Kie Ellens on realising art installations at a natural burial ground, which remain on display.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="cv-section">
+        <h2>Commissioned Projects</h2>
+
+        <div class="cv-entry-block">
+          <p class="cv-entry-title">Commissioned Jewellery Box</p>
+          <p class="cv-entry-sub">Groningen, NL · Dec 2023 – Aug 2024</p>
+          <ul class="cv-entry-list">
+            <li>Created a bespoke 170 cm (H) × 60 cm (W) × 40 cm (D) jewellery drawer, handmade from dark walnut and oxidised brass.</li>
+          </ul>
+        </div>
+
+        <div class="cv-entry-block">
+          <p class="cv-entry-title">Commissioned Poster Design — Slovene Civil Theatre in Trieste</p>
+          <p class="cv-entry-sub">Trieste, IT · Jan 2020 – Mar 2020</p>
+          <ul class="cv-entry-list">
+            <li>Led the creation and distribution of an illustrated poster for a theatre play based on Lagarce's drama "It's Only the End of the World."</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="cv-section">
+        <h2>Exhibitions</h2>
+
+        <div class="cv-entry-block">
+          <p class="cv-entry-title">MA Art and Science Grad Show — Central Saint Martins, Kings Cross</p>
+          <p class="cv-entry-sub">London, UK · Aug 2025</p>
+        </div>
+        <div class="cv-entry-block">
+          <p class="cv-entry-title">Sound Bathers — Vout-O-Reenee's Gallery, Whitechapel</p>
+          <p class="cv-entry-sub">London, UK · Jul 2025</p>
+        </div>
+        <div class="cv-entry-block">
+          <p class="cv-entry-title">I Am Not the Egg, I Am the Goose That Lays Them — The Good Rice Gallery</p>
+          <p class="cv-entry-sub">London, UK · Mar 2025</p>
+        </div>
+        <div class="cv-entry-block">
+          <p class="cv-entry-title">St. Art Gallery Oxford Street Exhibition</p>
+          <p class="cv-entry-sub">London, UK · Dec 2024 – Feb 2025</p>
+        </div>
+        <div class="cv-entry-block">
+          <p class="cv-entry-title">Rolluh and Risomatik Exhibition — Ledbury Central Saint Martins</p>
+          <p class="cv-entry-sub">London, UK · Jan 2024</p>
+        </div>
+        <div class="cv-entry-block">
+          <p class="cv-entry-title">Momentum — UAL Archway, Open Studio Group Exhibition</p>
+          <p class="cv-entry-sub">London, UK · Dec 2023</p>
+        </div>
+        <div class="cv-entry-block">
+          <p class="cv-entry-title">Featured Exhibitor — Manifestations 2022, Dutch Design Week</p>
+          <p class="cv-entry-sub">Eindhoven, NL · Nov 2022</p>
+        </div>
+        <div class="cv-entry-block">
+          <p class="cv-entry-title">Artist-in-Residence Programme</p>
+          <p class="cv-entry-sub">Friesland, NL · Mar 2022</p>
+        </div>
+        <div class="cv-entry-block">
+          <p class="cv-entry-title">Green Lights Exhibition — Minerva Art Academy</p>
+          <p class="cv-entry-sub">Groningen, NL · Feb 2022</p>
+        </div>
+        <div class="cv-entry-block">
+          <p class="cv-entry-title">Hannibal Art Competition Exhibition — Forma Aktua Gallery</p>
+          <p class="cv-entry-sub">Groningen, NL · Apr 2021 – May 2021</p>
+        </div>
+        <div class="cv-entry-block">
+          <p class="cv-entry-title">Third Year Expo — Minerva Art Academy</p>
+          <p class="cv-entry-sub">Groningen, NL · Mar 2021</p>
+        </div>
+        <div class="cv-entry-block">
+          <p class="cv-entry-title">Citizens of Glass Exhibition — Runa Gallery</p>
+          <p class="cv-entry-sub">Piran, SI · Aug 2019 – Oct 2019</p>
+        </div>
+        <div class="cv-entry-block">
+          <p class="cv-entry-title">Painting Colony Imperial Toll Booth — Art Femins</p>
+          <p class="cv-entry-sub">Sežana, SI · Jul 2019</p>
+        </div>
+        <div class="cv-entry-block">
+          <p class="cv-entry-title">The Dark Garden Exhibition — Vetrinjski Dvor</p>
+          <p class="cv-entry-sub">Maribor, SI · Feb 2019 – Mar 2019</p>
+        </div>
+      </section>
+
+      <section class="cv-section">
+        <h2>Honours &amp; Awards</h2>
+
+        <div class="cv-entry-block">
+          <p class="cv-entry-title">Young Talent Award — Manifestations 2022, Dutch Design Week</p>
+          <p class="cv-entry-sub">Eindhoven, NL · Nov 2022</p>
+        </div>
+        <div class="cv-entry-block">
+          <p class="cv-entry-title">First Place by Jury and the Public Vote for Artistic Work — Hannibal Art Competition</p>
+          <p class="cv-entry-sub">Groningen, NL · Aug 2021</p>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

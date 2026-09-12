@@ -1,0 +1,1845 @@
+/* ─── BASE ─────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --sb: 260px;
+  --topbar: calc((2.2cm / 0.7 * 0.8 * 0.8) * 1.3 + 1rem);
+}
+
+html { font-size: 13px; }
+
+body {
+  background: #fff;
+  color: #111;
+  font-family: 'Abel', Arial, Verdana, sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration: none; }
+
+.site-name {
+  font-size: calc(2.2cm / 0.7 * 0.8 * 0.8);
+  font-weight: 300;
+  letter-spacing: 0.01em;
+  color: #111;
+  display: block;
+  margin-bottom: 0;
+  flex-shrink: 0;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+/* Logotype image inside .site-name — using name-logo-final.png, a
+   hard-thresholded (pure black/white, no anti-aliasing) version of the
+   cropped source. This replaced an earlier filter:contrast(3) approach,
+   which fixed the "too gray" look but amplified JPEG compression noise
+   into a visible ridged texture on the letters — thresholding the pixels
+   directly at the source eliminates the noise instead of amplifying it.
+   Verified across the full desktop width range (701px-1920px): the flex
+   layout auto-shifts the nav's left edge to track the logo's right edge
+   (never a true negative/overlapping gap, even at 70px), so 65px is safe
+   everywhere. Narrower desktop windows (~700-1000px) end up with 0px
+   breathing room (logo flush against "HOME"), wide windows (1400px+)
+   have generous space — this is an inherent tradeoff of the nav's own
+   width (from earlier font-size/gap increases) eating up the available
+   room at narrow viewports, not an overlap bug. */
+.site-name-img {
+  height: 65px;
+  width: auto;
+  display: block;
+}
+
+/* Hamburger — hidden on desktop */
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.nav-toggle span {
+  display: block;
+  width: 18px;
+  height: 1px;
+  background: #111;
+  transition: transform 0.26s, opacity 0.26s;
+}
+
+.nav-toggle.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.nav-toggle.open span:nth-child(2) { opacity: 0; }
+.nav-toggle.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+/* ─── TOP BAR (pages with body.topbar-page) ───────────────────── */
+/* Fixed bar: name + inline nav row (desktop) or name + hamburger-
+   revealed dropdown (mobile). On the homepage the slideshow sits in a
+   contained frame below it instead of filling the screen; on other
+   topbar-page pages, .content sits below it instead. */
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--topbar);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 calc(4rem - 1cm + 2cm);
+  background: #fff;
+  z-index: 200;
+}
+
+.topbar-menu {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.topbar-nav {
+  display: flex;
+  align-items: center;
+  gap: 3.2rem;
+}
+
+.topbar-nav a {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 1.163rem;
+  font-weight: 700;
+  color: #111;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  transition: color 0.15s;
+}
+
+
+.topbar-instagram {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #111;
+  color: #fff;
+  flex-shrink: 0;
+  transition: opacity 0.15s;
+}
+
+.topbar-instagram:hover { opacity: 0.7; }
+
+/* .topbar-actions wraps the mobile instagram-bar icon and the hamburger
+   button (every page's topbar now has this — index.html, painting.html,
+   furniture-design.html, cv.html, contact.html). On desktop both children
+   stay display:none, but the wrapper div itself was still a real
+   (0-width) flex item under .topbar's justify-content: space-between —
+   turning what should be 2 flex items (site-name, topbar-menu) into 3,
+   which pulled .topbar-menu left of the true right edge instead of flush
+   against it. display: contents removes the wrapper's own box so its
+   (still display:none) children are excluded from flex layout
+   individually, restoring the original 2-item layout and the flush right
+   edge — on every page, since this rule isn't scoped to any one of them.
+   The mobile media query below already overrides this back to
+   display:flex for the icon+hamburger grouping, so mobile is unaffected. */
+.topbar-actions { display: contents; }
+
+/* Mobile-only duplicate of .topbar-instagram (each page's .topbar-actions),
+   sitting next to the hamburger instead of inside the dropdown. Hidden by
+   default here — same base-hidden/media-query-revealed pattern as
+   .nav-toggle above — so desktop, which never enters the mobile media
+   query, never sees it; only the original inside .topbar-menu renders
+   there, unchanged. Applies to every page, same reasoning as above. */
+.topbar-instagram-bar { display: none; }
+
+/* ─── CONTENT AREA ─────────────────────────────────────────── */
+.content {
+  margin-left: var(--sb);
+  min-height: 100vh;
+}
+
+/* Pages using the top bar instead of the sidebar: content clears the
+   fixed bar from the top instead of being offset from the left. */
+body.topbar-page .content {
+  margin-left: 0;
+  margin-top: var(--topbar);
+}
+
+/* Gallery detail viewer: account for the fixed top bar's height so the
+   sticky thumbnail strip and large image still fit within the viewport
+   exactly as they did against the old sidebar (mechanics unchanged).
+   max-height (not height) since .detail-img-wrap now hugs the image's
+   own size instead of being a fixed box — this just caps how large
+   that hugged box is allowed to grow before the image itself has to
+   scale down. */
+body.topbar-page .detail-img-wrap {
+  max-height: calc(100vh - 140px - var(--topbar));
+}
+
+body.topbar-page .detail-img {
+  max-height: calc(100vh - 140px - var(--topbar));
+}
+
+@media (min-width: 701px) {
+  /* Gallery-viewer pages (painting.html, furniture-design.html):
+     right-align the large image and its caption (instead of centering
+     them) so their right edge lines up with the Instagram icon's right
+     edge at any viewport width — centering plus a fixed offset only
+     lined up at one specific window width. justify-content (grid) is
+     the equivalent of the old align-items: flex-end (flex) now that
+     .detail-main is a single-column grid. */
+  body.painting-page .detail-main,
+  body.furniture-page .detail-main {
+    justify-content: end;
+  }
+
+  /* painting.html and furniture-design.html: consolidated into single
+     shared rules (previously duplicated per page with different values,
+     which drifted out of sync) — both pages' viewers are now byte-for-
+     byte identical. Image/info right inset recalculated for the 7cm
+     top-bar inset (gallery-detail's own 4rem right padding + this
+     inset = 7cm total, matching the Instagram icon's right edge).
+
+     This is padding-right on .detail-main (the grid container), NOT
+     margin-right on the individual items as it used to be — CSS Grid
+     factors an item's own margin into how wide an auto/max-content
+     column gets sized, so equal margin-right on both .detail-img-wrap
+     and .detail-info was inflating the shared column past the image's
+     real width, making .detail-info's width:100% wider than the image
+     by exactly that margin amount instead of matching it. Container
+     padding insets the whole grid without that side effect. */
+  body.painting-page .detail-main,
+  body.furniture-page .detail-main {
+    padding-right: calc(7cm - 4rem);
+  }
+
+  /* Image narrowed by 2cm off the right side. Rendered width is min(100%
+     of .detail-main's available cross-size, max-width) — at medium-narrow
+     windows the 100% figure binds (see the base .detail-img-wrap/.detail-img
+     rules for why this is now an actual min(), not just this comment's
+     description of one — it used to be just a fixed calc() here with no
+     100% counterpart, which let wide images overflow past the thumbnail
+     column at ~1000-1300px windows since nothing capped them to the space
+     .detail-main actually had); at wide windows (>~1387px, where
+     .detail-main's cross-size alone exceeds 820px) the calc() cap binds
+     instead. Both must be reduced by 2cm, or wide windows fall back to the
+     un-reduced 820px cap and silently undo the fix. Since the right edge
+     is anchored by align-items:flex-end above (and margin-right is
+     unchanged), shrinking width/max-width alone keeps the right edge
+     locked to the Instagram icon's edge and only pulls the left edge
+     inward — no separate horizontal shift needed.
+
+     .detail-img-wrap no longer sets width here (it's fit-content from
+     the base rule, so it can hug images of any shape) — only max-width
+     carries over, capping how wide the hugged box may grow. .detail-info
+     no longer needs a page-specific override at all: it's width:100% of
+     the shared grid column (see .detail-main), which .detail-img-wrap's
+     max-width here already caps — so .detail-info's width automatically
+     tracks whatever the image's actual rendered width ends up being. */
+  body.painting-page .detail-img-wrap,
+  body.furniture-page .detail-img-wrap {
+    max-width: min(calc(820px - 2cm), 100%);
+  }
+
+  body.painting-page .detail-img,
+  body.furniture-page .detail-img {
+    max-width: min(calc(820px - 2cm), 100%);
+  }
+
+  /* homepage, painting.html, furniture-design.html, cv.html, and
+     contact.html: top-bar group at a flat 7cm inset each side
+     (painting.html's grid landing view and cv.html/contact.html's
+     content below use the same 7cm, copied exactly from the homepage). */
+  body.home-page .topbar,
+  body.painting-page .topbar,
+  body.furniture-page .topbar,
+  body.cv-page .topbar,
+  body.contact-page .topbar {
+    padding-left: 7cm;
+    padding-right: 7cm;
+  }
+
+  body.topbar-page .detail-left { top: calc(var(--topbar) + 38px); }
+  body.topbar-page .thumb-col { height: calc(100vh - var(--topbar) - 38px); }
+
+  /* painting.html and furniture-design.html: thumbnail column left inset
+     recalculated for the 7cm top-bar inset (gallery-detail's own 5rem
+     left padding + this margin = 7cm total, matching the name's left
+     edge). */
+  body.painting-page .detail-left,
+  body.furniture-page .detail-left {
+    margin-left: calc(7cm - 5rem);
+  }
+
+}
+
+/* ─── SLIDESHOW (home only) ────────────────────────────────── */
+.slideshow {
+  position: relative;
+  margin: var(--topbar) 7cm calc(4rem - 1cm);
+  height: 74vh;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 1.8s ease;
+}
+
+.slide.active { opacity: 1; }
+
+.slide:nth-child(1) { background-color: #b8b8b8; }
+.slide:nth-child(2) { background-color: #c9c9c9; }
+.slide:nth-child(3) { background-color: #ababab; }
+.slide:nth-child(4) { background-color: #d1d1d1; }
+.slide:nth-child(5) { background-color: #bfbfbf; }
+
+/* ─── GALLERY — single column, stacked ────────────────────── */
+.gallery-stack {
+  padding: 38px 5rem 9rem;
+}
+
+.stack-item {
+  margin-bottom: 6rem;
+  cursor: pointer;
+}
+
+.stack-item:last-child { margin-bottom: 0; }
+
+.img-wrap {
+  background: #e2e2e2;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  margin-bottom: 1rem;
+  max-width: 820px;
+}
+
+.img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.img-wrap img.loaded { opacity: 1; }
+
+.stack-item:hover .img-wrap { opacity: 0.9; }
+
+.caption {
+  font-size: 0.923rem;
+  line-height: 1.6;
+  color: rgba(0, 0, 0, 0.4);
+  max-width: 820px;
+}
+
+.caption strong {
+  font-weight: 400;
+  color: #111;
+  display: block;
+}
+
+/* ─── SERIES LANDING (painting.html) — masonry grids per series ──── */
+.series-landing {
+  padding: 0 7cm 9rem;
+}
+
+.series-section {
+  margin-bottom: 5rem;
+}
+
+.series-section:last-child {
+  margin-bottom: 0;
+}
+
+.series-heading {
+  font-size: 1.85rem;
+  font-weight: 400;
+  color: #111;
+  letter-spacing: 0.01em;
+  margin-bottom: 1.8rem;
+}
+
+.series-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-auto-rows: 1px;
+  grid-auto-flow: dense;
+  column-gap: 1.4rem;
+  row-gap: 0;
+}
+
+.series-item {
+  display: block;
+  margin-bottom: 1.4rem;
+  background: #e2e2e2;
+  border: 1px solid #e4e4e4;
+  overflow: hidden;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.series-item:hover { opacity: 0.9; }
+
+/* Bento-style masonry: card width AND height both vary per position
+   (a 5-column grid with 1- or 2-column spans + varying row-span pixel
+   heights), instead of the old equal-width columns layout. grid-auto-rows
+   is 1px so each row-span value below is the card's height in pixels;
+   row-gap stays 0 (grid gaps compound across every spanned row-track,
+   which would otherwise massively inflate tall cards) and the visual
+   gap between stacked cards comes from .series-item's own margin-bottom. */
+.series-item:nth-child(5n+1) { grid-column: span 2; grid-row: span 420; }
+.series-item:nth-child(5n+2) { grid-column: span 1; grid-row: span 240; }
+.series-item:nth-child(5n+3) { grid-column: span 1; grid-row: span 320; }
+.series-item:nth-child(5n+4) { grid-column: span 2; grid-row: span 220; }
+.series-item:nth-child(5n+5) { grid-column: span 1; grid-row: span 270; }
+
+.series-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.series-item img.loaded { opacity: 1; }
+
+/* "Eternal Sunshine" and "The Beginning of the End" — true masonry
+   instead of the bento grid above. Both share the same item-level
+   rules (no background/border/margin, image sizes to its own aspect
+   ratio via width:100%/height:auto — no forced box, no object-fit),
+   but their outer structure differs, so .series-grid/.series-col stay
+   Eternal-Sunshine-only below while Beginning-of-the-End gets its own
+   block further down.
+   Higher specificity than the plain .series-grid/.series-item/nth-child
+   rules above (and the mobile equivalents further down) lets both
+   sections' rules win at every viewport without media-query copies. */
+.series-section[data-series="eternal-sunshine"] .series-grid {
+  display: flex;
+  gap: 1.4rem;
+}
+
+.series-section[data-series="eternal-sunshine"] .series-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  flex: 1 1 0;
+}
+
+.series-section[data-series="eternal-sunshine"] .series-item,
+.series-section[data-series="beginning-of-the-end"] .series-item {
+  display: block;
+  margin-bottom: 0;
+  background: none;
+  border: none;
+}
+
+.series-section[data-series="eternal-sunshine"] .series-item img,
+.series-section[data-series="beginning-of-the-end"] .series-item img {
+  width: 100%;
+  height: auto;
+}
+
+/* "The Beginning of the End" — 5 fully self-contained rows, stacked
+   top to bottom. "Self-contained" is the key property: every row
+   starts and ends at its own height and nothing spans or persists
+   across rows, so there's no way for one part of a row to run out of
+   content while another keeps going (that's what broke the earlier
+   attempt at a continuous multi-row sidebar — two independently-
+   changing-height columns can't stay visually balanced in plain CSS).
+   .series-grid stacks the 5 rows. .row-3col / .row-2col are simple
+   rows of equal-width single-item columns (3 or 2 across). .row-split
+   is Row 2 specifically: a 2-column row where each column is itself a
+   vertical stack of several items (3 left / 2 right) rather than one
+   item — .split-col is that inner stack, flex:1 1 0 so both stacks
+   are equal width, with plain .series-item children filling that
+   width directly (no separate width hack needed, unlike the earlier
+   .series-stack bug, because .split-col's own flex-basis already IS
+   the width we want its items to fill — nothing above it is wider). */
+.series-section[data-series="beginning-of-the-end"] .series-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
+/* align-items: flex-start (not the flex default of stretch) matters
+   here: without it, whichever image in a row is shorter than its
+   tallest row-mate gets its own item box stretched to match — but
+   since .series-item img is height:auto (sized to its own aspect
+   ratio, never filled to the box), the image itself doesn't grow to
+   fill that stretched box, leaving invisible empty space below the
+   shorter image before the next row even starts. Same bug class as
+   the Eternal Sunshine pair fix earlier this session, just here on
+   every row instead of one pinned pair. Note: this still leaves the
+   inherent row-based tradeoff that the row's own total height is set
+   by its tallest member, so a much shorter row-mate can still have
+   visible space below it before the next row starts — that's not
+   fixable within a row-based structure (see the independent-columns
+   test this session, reverted back to this row-based version). */
+.series-section[data-series="beginning-of-the-end"] .row-3col,
+.series-section[data-series="beginning-of-the-end"] .row-2col,
+.series-section[data-series="beginning-of-the-end"] .row-split {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.4rem;
+}
+
+/* Standalone rule — deliberately NOT merged into the shared
+   .row-3col, .row-2col, .row-split selector above, and deliberately
+   targeting .col-large specifically rather than the whole .row-split:
+   pulling the entire row up (both columns) also dragged the left
+   column (4,5,6) up into image 1's space, since that column shares
+   image 1's x-range — this column doesn't (col-large sits entirely to
+   the right of image 1, under images 2/3 instead), so it can move up
+   on its own with no overlap risk against image 1 at any distance.
+   -73.8px brings it to 18.2px (the standard gap) below image 3's
+   bottom specifically, which is the binding constraint here (image 3
+   sits lowest of the two images col-large is under). */
+.series-section[data-series="beginning-of-the-end"] .split-col.col-large {
+  margin-top: -73.8px;
+}
+
+/* Same fix, same reasoning, applied to Row 4's columns 1 and 2: item 11
+   (Row 3's tall figure-portrait piece, column 3) sets Row 3's actual
+   box height at 454.4px, but items 9 and 10 (columns 1 and 2) are only
+   ~317px tall, leaving dead space below them before Row 4 starts in
+   those columns — the container-to-container gap measures a clean
+   18.2px, so this is purely a shorter-row-mate issue, not a shared-rule
+   problem. Pulling items 12/13 (not item 14, which sits below item 11
+   and is already correctly positioned) up by the measured 137.3px
+   brings them to the standard 18.2px gap below items 9/10. Standalone
+   rule, not merged into the shared .row-3col > .series-item selector
+   (which only sets flex:1 1 0) — same isolation approach as col-large
+   above. */
+.series-section[data-series="beginning-of-the-end"] .series-item[data-order="12"],
+.series-section[data-series="beginning-of-the-end"] .series-item[data-order="13"] {
+  margin-top: -137.3px;
+}
+
+/* Same fix again, Row 4 → Row 5 this time: item 14 (Row 4's column 3,
+   373.8px) is tallest and sets Row 4's box height; items 12/13 are
+   ~317px, so item 15 (which sits under columns 1+2, x-range 264.6-
+   913.7 — doesn't reach item 14's column at 937.9-1256.4, so no
+   overlap risk) has dead space above it. Item 16 sits under item 14
+   and is already correctly positioned, so it's untouched. Standalone
+   rule, not merged into .row-2col > .series-item or .item-large. */
+.series-section[data-series="beginning-of-the-end"] .series-item[data-order="15"] {
+  margin-top: -193.9px;
+}
+
+.series-section[data-series="beginning-of-the-end"] .row-3col > .series-item,
+.series-section[data-series="beginning-of-the-end"] .row-2col > .series-item {
+  flex: 1 1 0;
+}
+
+.series-section[data-series="beginning-of-the-end"] .split-col {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
+/* Size hierarchy within a row: some images read larger/more prominent
+   than their row-mates, per the reference (Row 2's right side, Row 5's
+   left item). For Row 2 this has to happen at the .split-col level,
+   not the individual item — items 7/8 are stacked inside their column,
+   not sitting side by side, so making them "larger" means giving their
+   whole column more width relative to the 4/5/6 column next to it.
+   For Row 5, item 15 sits directly in the row, so its own flex value
+   is what controls its width there. Both override the plain flex:1 1 0
+   above via one extra class, same ratio (~62/38 split) either way. */
+.series-section[data-series="beginning-of-the-end"] .split-col.col-large {
+  flex: 1.6 1 0;
+}
+
+.series-section[data-series="beginning-of-the-end"] .row-2col > .series-item.item-large {
+  flex: 2 1 0;
+}
+
+/* ─── FURNITURE GRID (furniture-design.html) ──────────────────────
+   Matches the artist's Canva reference mockup exactly:
+
+     Row 1 (auto): Frame 1 (spans col 1–2, full-width)
+     Row 2 (auto): Frame 2 (spans col 1–2, full-width)
+     Row 3 (auto): Frame 3 (col 1, narrow) | Frame 4 (col 2, wide)
+                   — a normal pair, each sized by its own aspect-ratio
+     Row 4 (auto): Frame 5 (col 1, narrow, top)    | Frame 7 (col 2,
+     Row 5 (auto): Frame 6 (col 1, narrow, bottom) |   wide, spans
+                   rows 4–5, tall)
+     Row 6 (auto): Frame 8 (spans col 1–2, full-width)
+     Row 7 (auto): small centered logo-mark placeholder
+
+   Columns are 2fr/3fr (40/60 split, narrow left / wide right)
+   throughout. Rows are NOT height-matched to each other — each sizes
+   naturally to its own content.
+
+   Every frame now has its own artist-specified aspect-ratio (Frame 3 is
+   portrait 2/3 while its row-3 sibling Frame 4 is landscape 3/2, so
+   their NATURAL heights differ at the same rendered widths). align-items:
+   stretch (explicit here, though it's the CSS Grid default) makes
+   whichever aspect-ratio produces the taller natural height win — the
+   row's actual height — and the shorter sibling is stretched to match,
+   its own aspect-ratio becoming a preference rather than a guarantee
+   for the FINAL rendered box (object-fit: cover on the inner <img>
+   absorbs the resulting crop). The Frame 5+6+7 block uses the same
+   mechanism one level deeper via its own sub-grid (.furniture-quad,
+   same 2fr/3fr columns, grid-template-rows: 1fr 1fr): Frame 7's very
+   tall 0.62/1 aspect-ratio makes it by far the tallest natural height,
+   so Frame 5+6 (each declared 3/2) both get stretched well past their
+   own ratio to collectively match Frame 7's height exactly. */
+.furniture-grid {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  align-items: stretch;
+  gap: 1.4rem;
+  /* Top padding was 38px, adding an extra gap below the topbar beyond
+     .content's own margin-top: var(--topbar) (css/style.css:168-171).
+     index.html's .slideshow has no such extra padding — its margin-top
+     is exactly var(--topbar), so it starts flush against the topbar's
+     bottom edge. painting.html's .series-landing (css/style.css:354-356)
+     already matches that pattern (padding: 0 7cm 9rem) too; this brings
+     furniture-design.html in line with both instead of being the one
+     page with extra breathing room here. Mobile's separate .furniture-
+     grid override (css/style.css, max-width: 700px block) is untouched. */
+  padding: 0 7cm 9rem;
+}
+
+.furniture-item {
+  background: #e2e2e2;
+  border: 1px solid #e4e4e4;
+  overflow: hidden;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.furniture-item:hover { opacity: 0.9; }
+
+.furniture-item.f-full   { grid-column: 1 / 3; width: 100%; aspect-ratio: 3 / 2; }
+.furniture-item.f-narrow { grid-column: 1;     width: 100%; aspect-ratio: 2 / 3; }
+.furniture-item.f-wide   { grid-column: 2;     width: 100%; aspect-ratio: 3 / 2; }
+
+/* Frame 1 duo: main (65%) + detail (35%) column widths, side by side,
+   matching the Rae Klein reference style. Adaptive now, not a forced
+   uniform box — each image sizes to its OWN natural aspect ratio at
+   its column's width (no fixed height, no object-fit crop/letterbox,
+   no background color), same "image is its own frame" idea as the
+   single-image detail viewer and the Eternal Sunshine masonry. The two
+   images will end up different heights since their photos have
+   different proportions — that's expected, not a bug.
+   align-items: start (not the grid default of stretch) matters here:
+   without it, the shorter image's item box gets stretched to match
+   the taller one, leaving invisible empty space below the shorter
+   image instead of the box just ending where the image does — same
+   bug class fixed in several other places this session. */
+.furniture-duo {
+  grid-column: 1 / 3;
+  display: grid;
+  grid-template-columns: 65fr 35fr;
+  align-items: start;
+  gap: 1.4rem;
+}
+
+.furniture-duo .furniture-item.f-main,
+.furniture-duo .furniture-item.f-detail {
+  background: none;
+  border: none;
+}
+
+.furniture-duo .furniture-item.f-main {
+  grid-column: 1;
+  width: 100%;
+}
+
+.furniture-duo .furniture-item.f-detail {
+  grid-column: 2;
+  width: 100%;
+}
+
+.furniture-duo .furniture-item img {
+  width: 100%;
+  height: auto;
+}
+
+/* Sub-grid holding Frame 5 (top-left), Frame 6 (bottom-left, stacked
+   below 5) and Frame 7 (tall, right column, spans both rows) */
+.furniture-quad {
+  grid-column: 1 / 3;
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  grid-template-rows: 1fr 1fr;
+  align-items: stretch;
+  gap: 1.4rem;
+}
+
+.furniture-quad .furniture-item.f-stack {
+  grid-column: 1;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+}
+
+.furniture-quad .furniture-item.f-tall {
+  grid-column: 2;
+  width: 100%;
+  grid-row: 1 / 3;
+  aspect-ratio: 0.62 / 1;
+}
+
+.furniture-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.furniture-item img.loaded { opacity: 1; }
+
+/* End-of-grid logo mark — small, square, centered; deliberately NOT a
+   .furniture-item (no data-group, no click handler, no hover state)
+   since it isn't a photo and shouldn't open any viewer. No background/
+   border here (unlike the photo frames above) since this now holds a
+   real image (images/logo-mark.png) rather than an empty placeholder
+   box — a gray fallback square would show through around any
+   transparency in the logo artwork. */
+.furniture-endmark {
+  grid-column: 1 / 3;
+  width: 150px;
+  aspect-ratio: 1 / 1;
+  margin: 2rem auto;
+}
+
+.furniture-endmark img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* ─── GALLERY DETAIL VIEW ──────────────────────────────────── */
+.gallery-detail {
+  display: none;
+  align-items: flex-start;
+  padding: 38px 4rem 8rem 5rem;
+  min-height: 100vh;
+}
+
+/* Left column: thumbnail strip and nav controls side by side */
+.detail-left {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  margin-left: -38px;
+  margin-right: 7rem;
+  position: sticky;
+  top: 38px;
+  align-self: flex-start;
+  transform: translateY(-20px);
+}
+
+.thumb-col {
+  width: 90px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: calc(100vh - 38px);
+  overflow-y: scroll;
+  scrollbar-width: none; /* Firefox: hide native */
+}
+
+.thumb-col::-webkit-scrollbar { display: none; } /* WebKit: hide native */
+
+/* Custom scrollbar track + thumb injected by JS */
+.thumb-sb-track {
+  position: relative;
+  width: 6px;
+  flex-shrink: 0;
+  align-self: stretch;
+  margin-left: 5px;
+  background: transparent; /* hidden by default; JS switches to #e0e0e0 on scroll/drag */
+  border-radius: 3px;
+  transition: background 0.35s;
+}
+
+.thumb-sb-thumb {
+  position: absolute;
+  left: 0;
+  width: 6px;
+  background: #555; /* always visible — not affected by parent background */
+  border-radius: 3px;
+  cursor: pointer;
+  min-height: 20px;
+}
+
+.thumb-item {
+  cursor: pointer;
+  opacity: 0.3;
+  transition: opacity 0.2s;
+  flex-shrink: 0;
+  overflow: hidden;
+  border: 1px solid #e4e4e4;
+}
+
+.thumb-item:hover { opacity: 0.65; }
+.thumb-item.active { opacity: 1; }
+
+.thumb-item img {
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  display: block;
+  background: #e2e2e2;
+}
+
+/* Nav controls: horizontal row pinned to the bottom of the thumb-col */
+.detail-nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-left: 14px;
+  align-self: flex-end;
+}
+
+.nav-arrow {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 3.15rem;
+  color: #555;
+  padding: 0;
+  margin: 0 -0.2em;
+  line-height: 1;
+  transition: color 0.15s;
+  display: flex;
+  align-items: center;
+}
+
+.nav-arrow:hover { color: #111; }
+
+.nav-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 3.15rem;
+  color: #555;
+  padding: 0;
+  margin: 0 -0.2em;
+  line-height: 1;
+  transition: color 0.15s;
+  display: flex;
+  align-items: center;
+}
+
+.nav-close:hover { color: #111; }
+
+/* Right side: large image + info, centered in available space.
+   display:grid with a single max-content column (rather than flex)
+   so .detail-img-wrap and .detail-info share one column track — the
+   track's width is set by its widest content contributor (normally
+   the image, via .detail-img-wrap's own fit-content/max-width), and
+   .detail-info's width:100% (below) then fills that SAME width
+   dynamically for whatever image is currently displayed, instead of
+   holding a fixed width of its own. justify-content (not align-items)
+   positions that single column within .detail-main's full flex width. */
+.detail-main {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  /* minmax(0, max-content), not plain max-content: a plain max-content
+     track sizes to its content's ideal width regardless of how much
+     space .detail-main actually has (that's what max-content means),
+     so at medium-narrow windows the track — and the image/caption
+     inside it — rendered wider than the space left next to the sticky
+     thumbnail column and spilled left over it. The 0 minimum lets the
+     track shrink to whatever's actually available instead of forcing
+     its max-content size, the same role min-width:0 plays on this same
+     element as a flex child (see above) applied one level down. */
+  grid-template-columns: minmax(0, max-content);
+  justify-content: center;
+  padding-right: 48px;
+  transform: translateY(-20px);
+}
+
+/* Adaptive container: sizes itself to hug the actual image (fit-content)
+   rather than being a large fixed box, with max-width/max-height as
+   upper bounds so it never overflows the viewport (image itself scales
+   down first via .detail-img's own max-width/max-height, then this box
+   hugs whatever size the image ends up at). No background/padding —
+   the image is the only visible shape here, not a frame around it.
+   max-width is min(820px, 100%): 820px is the ideal ceiling on wide
+   windows (plenty of room next to the thumbnail column); 100% is what
+   actually keeps it from overflowing that column at medium-narrow
+   windows, resolving against the grid area's now-shrinkable width
+   (see .detail-main's minmax(0, ...) above) instead of a flat pixel
+   value that doesn't know how much space is really there. */
+.detail-img-wrap {
+  width: fit-content;
+  min-width: 0;
+  max-width: min(820px, 100%);
+  height: fit-content;
+  max-height: calc(100vh - 140px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin-bottom: 1.4rem;
+}
+
+.detail-img {
+  /* Not a percentage of .detail-img-wrap directly (that wrap is
+     fit-content, an indefinite size, so a percentage against it would
+     resolve to "none"). Instead this mirrors the wrap's own min(ideal,
+     100%) cap one level down: 100% here resolves against .detail-img's
+     own containing block for width purposes — .detail-img-wrap's
+     content box — which is itself now correctly clamped by the wrap's
+     max-width above, so shrinking the wrap also shrinks this ceiling
+     in step, and the image (a replaced element, so flexbox can shrink
+     it below this cap without needing an explicit min-width:0) never
+     renders wider than the wrap actually ended up being. No padding on
+     the wrap anymore, so no subtraction needed here — the image can use
+     the wrap's full max-width/max-height directly. */
+  max-width: min(820px, 100%);
+  max-height: calc(100vh - 140px);
+  width: auto;
+  height: auto;
+  display: block;
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.detail-img.loaded { opacity: 1; }
+
+/* width: 100% of the shared max-content grid column (see .detail-main
+   above) — no max-width of its own, since the column's ceiling is
+   already set by .detail-img-wrap's own max-width, so this dynamically
+   tracks whatever width the currently-displayed image ends up at.
+   No margin-right here (or on .detail-img-wrap) — the right inset now
+   lives on .detail-main as padding-right instead, see that rule for why. */
+.detail-info {
+  width: 100%;
+}
+
+.detail-title {
+  font-size: 1.231rem;
+  color: #000;
+  margin-bottom: 0.2rem;
+}
+
+.detail-meta {
+  font-size: 1rem;
+  color: rgba(0, 0, 0, 0.75);
+  line-height: 1.55;
+}
+
+.detail-meta:empty { display: none; }
+
+/* Mobile-only fullscreen image view (painting.html's #mobileImageView) —
+   one shared instance for every image in Eternal Sunshine and Beginning
+   of the End's mobile single-column stacks (see js/main.js). Hidden
+   unconditionally here so it's never visible by default at ANY viewport,
+   including desktop; the mobile media query below only styles its .open
+   state, so even if .open were somehow present outside that breakpoint
+   this base rule is the only one in effect there and it stays hidden. In
+   practice .open is only ever added by the mobile-gated click-intercept
+   in js/main.js, so this is belt-and-suspenders, not the only guard. */
+#mobileImageView { display: none; }
+
+/* Mobile-only menu overlay (every page's #mobileMenuOverlay) — hidden
+   unconditionally here, same belt-and-suspenders reasoning as
+   #mobileImageView above: the mobile media query below only styles its
+   .open state, so desktop stays hidden regardless of whether .open ever
+   ends up present outside that breakpoint. In practice .open is only
+   toggled by js/main.js's nav-toggle handler, which the hamburger button
+   itself already gates to mobile (display: none on desktop). */
+#mobileMenuOverlay { display: none; }
+
+/* ─── LIGHTBOX (fullscreen), desktop only ─────────────────────
+   Rae Klein–style fullscreen view for whichever image is currently
+   shown in the shared #gallery-detail viewer, on both painting.html
+   (Eternal Sunshine + Beginning of the End) and furniture-design.html
+   (including the Jewelry Box's 5-image set). Own #lightbox/.lightbox-*
+   classes only — none of the shared .detail-img / .detail-img-wrap /
+   #gallery-detail rules above are edited, and the overlay markup itself
+   is built entirely in JS (see the "Fullscreen lightbox" block at the
+   end of main.js), so nothing needed adding to either HTML page.
+   Entirely inside this one @media block — mobile gets neither the
+   cursor hint nor the overlay styling; the JS also checks the same
+   701px breakpoint before ever opening it, so mobile behavior is
+   unaffected either way. */
+@media (min-width: 701px) {
+  /* Hover affordance: signals the shown image is clickable to enlarge. */
+  body.painting-page .detail-img,
+  body.furniture-page .detail-img {
+    cursor: zoom-in;
+  }
+
+  .lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 500; /* above .topbar (200) and .gallery-detail underneath */
+    background: #fff; /* matches body { background: #fff } */
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lightbox.active { display: flex; }
+
+  .lightbox-img {
+    max-width: 100vw;
+    max-height: 100vh;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    display: block;
+  }
+
+  .lightbox-close,
+  .lightbox-prev,
+  .lightbox-next {
+    position: fixed;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #111;
+    padding: 0;
+    margin: 0;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.15s;
+  }
+
+  .lightbox-close:hover,
+  .lightbox-prev:hover,
+  .lightbox-next:hover {
+    opacity: 0.55;
+  }
+
+  .lightbox-close {
+    top: 2rem;
+    right: 2.5rem;
+    font-size: 2rem;
+  }
+
+  .lightbox-prev,
+  .lightbox-next {
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 3.15rem;
+  }
+
+  .lightbox-prev { left: 2rem; }
+  .lightbox-next { right: 2rem; }
+}
+
+/* ─── CV ───────────────────────────────────────────────────── */
+.cv-wrap {
+  /* Top padding was 38px, adding an extra gap below the topbar beyond
+     .content's own margin-top: var(--topbar) (css/style.css:168-171) —
+     same fix as .furniture-grid (css/style.css:602-616): index.html's
+     .slideshow has no such extra padding, so this brings cv.html in
+     line with it and with furniture-design.html/painting.html. The two
+     other desktop-range .cv-wrap rules (max-width: 960px and min-width:
+     1400px, below) get the same fix; the mobile one (max-width: 700px)
+     is untouched. */
+  padding: 0 7cm 9rem;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+/* Stacked layout: heading sits above its own section's entries, both
+   capped at the same width, so the heading reads as that section's title
+   rather than a sidebar label. */
+.cv-section {
+  max-width: 820px;
+  margin-bottom: 3.6rem;
+}
+.cv-section:last-child { margin-bottom: 0; }
+
+.cv-section h2 {
+  font-size: 0.846rem;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.6);
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.8rem;
+}
+
+.cv-entry-block {
+  margin-bottom: 1.8rem;
+}
+.cv-entry-block:last-child { margin-bottom: 0; }
+
+.cv-entry-title {
+  font-size: 1.154rem;
+  color: #111;
+  line-height: 1.5;
+}
+
+.cv-entry-sub {
+  font-size: 1.077rem;
+  color: rgba(0, 0, 0, 0.65);
+  line-height: 1.5;
+  margin-top: 0.25rem;
+}
+
+.cv-entry-list {
+  list-style: disc;
+  margin: 0.7rem 0 0 1.2rem;
+  max-width: 680px;
+}
+
+.cv-entry-list li {
+  font-size: 1.077rem;
+  color: rgba(0, 0, 0, 0.75);
+  line-height: 1.7;
+  margin-bottom: 0.35rem;
+}
+
+.cv-entry-list li:last-child { margin-bottom: 0; }
+
+/* ─── CONTACT ──────────────────────────────────────────────── */
+/* Was vertically+horizontally centered (display:flex;align-items:center;
+   justify-content:center;min-height:calc(100vh - var(--topbar));
+   text-align:center) — switched to the same top-anchored block pattern
+   as .cv-wrap (padding: 0 7cm 9rem; max-width; margin: 0 auto), so
+   content starts at the same vertical level below the topbar as
+   index.html/furniture-design.html/cv.html instead of being centered in
+   the remaining viewport height. */
+.contact-wrap {
+  /* Left padding at 7.5cm (was 7cm, matching the other pages' shared
+     inset; briefly 8cm, eased back per feedback that it read as too far)
+     to shift the whole content block right slightly — deliberately
+     asymmetric now; right padding stays 7cm. */
+  padding: 0 7cm 9rem 7.5cm;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.contact-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.65rem;
+}
+
+.contact-inner a {
+  font-size: 1.3rem;
+  color: #111;
+  transition: color 0.15s;
+}
+
+.contact-inner a:hover { color: rgba(0, 0, 0, 0.3); }
+
+/* Subscribe block: intro line + email-capture form, modeled after Rae
+   Klein's contact page — a plain "Email *" label over an underlined
+   input, with a bold "Subscribe" text button to its right. */
+.subscribe-block {
+  margin-top: 3rem;
+  max-width: 480px;
+}
+
+.subscribe-text {
+  font-size: 1.3rem;
+  color: #111;
+  line-height: 1.6;
+  margin-bottom: 1.6rem;
+}
+
+.subscribe-form {
+  display: flex;
+  align-items: flex-end;
+  gap: 2rem;
+}
+
+.subscribe-field {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.subscribe-field label {
+  font-size: 1.1rem;
+  color: #111;
+  margin-bottom: 0.5rem;
+}
+
+/* Plain underline, no box — background: transparent so it never picks up
+   a browser default white/gray input fill. */
+.subscribe-field input {
+  border: none;
+  border-bottom: 2px solid #111;
+  background: transparent;
+  font-family: 'Abel', sans-serif;
+  font-size: 1.3rem;
+  color: #111;
+  padding: 0.3rem 0;
+}
+
+.subscribe-field input:focus { outline: none; }
+
+/* Text button, not a boxed one — no background/border, just bold type.
+   Abel only ships a single (regular) weight, so font-weight: 700 here is
+   a browser-synthesized bold — standard practice for a short label like
+   this, and avoids pulling in an extra font-weight file for one word. */
+.subscribe-btn {
+  background: none;
+  border: none;
+  font-family: 'Abel', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #111;
+  cursor: pointer;
+  padding: 0 0 0.4rem;
+  flex-shrink: 0;
+  transition: opacity 0.15s;
+}
+
+.subscribe-btn:hover { opacity: 0.6; }
+
+.subscribe-success {
+  font-size: 1rem;
+  color: #111;
+  margin-top: 1.6rem;
+}
+
+/* ─── RESPONSIVE ───────────────────────────────────────────── */
+@media (max-width: 960px) {
+  .gallery-stack { padding: 38px 3.5rem 7rem; }
+  .cv-wrap { padding: 0 7cm 7rem; }
+  .contact-wrap { padding: 0 7cm 7rem 7.5cm; }
+}
+
+@media (max-width: 700px) {
+  .site-name {
+    font-size: 1.3rem;
+    margin-bottom: 2rem;
+  }
+
+  /* No hamburger needed */
+  .nav-toggle { display: none; }
+
+  /* Content follows sidebar naturally */
+  .content {
+    margin-left: 0;
+    padding-top: 0;
+  }
+
+  /* Slideshow on home: smaller contained frame */
+  .slideshow {
+    margin: calc(var(--topbar) + 1.6rem) 1.6rem 2.5rem;
+    height: 50vh;
+  }
+
+  /* TEST: mobile slideshow contain fix — remove this whole block to revert
+     to the fixed-height/cover behavior above (css/style.css:1086-1089 stays
+     as-is; this just overrides it while the block is present).
+     Scoped only to max-width:700px, desktop unaffected.
+
+     All 4 slide images are close to 16:9 (1920x1080, 1920x1080, 1544x902
+     ~1.71, 1376x768 ~1.79), so one shared aspect-ratio fits all of them
+     within ~4% instead of sizing the container per-image. Per-image sizing
+     isn't viable anyway: all .slide elements are stacked with
+     position:absolute/inset:0 inside the same .slideshow box for the JS
+     crossfade (js/main.js), so only one box size can apply at a time —
+     switching it per active slide would cause a layout jump on every
+     transition. A fixed aspect-ratio keeps the box (and the fade) stable
+     while letting the container hug the image instead of letterboxing. */
+  .slideshow {
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
+
+  .slide {
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  /* END TEST: mobile slideshow contain fix */
+
+  .gallery-stack { padding: 2.8rem 1.6rem 5rem; }
+  .cv-wrap { padding: 2.8rem 1.6rem 5rem; }
+
+  /* contact.html had no mobile override at all before (it relied on
+     .contact-wrap's old centered-flex layout, which didn't need one) —
+     now that it's a top-anchored block like .cv-wrap, it needs the same
+     1.6rem side padding here; the desktop rule's 7cm would otherwise
+     still apply and crush the content into a narrow strip. Subscribe
+     form stacks vertically on mobile instead of sitting side-by-side. */
+  .contact-wrap { padding: 2.8rem 1.6rem 5rem; }
+
+  .subscribe-form {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1.2rem;
+  }
+
+  .subscribe-btn {
+    align-self: flex-start;
+    padding-bottom: 0;
+  }
+
+  /* Top padding was 2.8rem, adding an extra gap below the topbar beyond
+     .content's own margin-top: var(--topbar) (css/style.css:168-171,
+     unconditional — applies on mobile too) — same issue and same fix as
+     .furniture-grid's mobile rule just above (css/style.css:1352-1362):
+     index.html's .slideshow (css/style.css:1250-1253, mobile) totals
+     var(--topbar) + 1.6rem with no .content wrapper involved, so 1.6rem
+     matches that here too, instead of 2.8rem. */
+  .series-landing { padding: 1.6rem 1.6rem 5rem; }
+  .series-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 1px;
+    column-gap: 0.8rem;
+    row-gap: 0;
+  }
+  .series-item { margin-bottom: 0.8rem; }
+  .series-heading { font-size: 1.75rem; margin-bottom: 1.2rem; }
+
+  /* Furniture (furniture-design.html), mobile only — single-column
+     full-width stack, matching the Eternal Sunshine / Beginning of the
+     End mobile stacks above (same 1.4rem gap for visual consistency).
+     Desktop's .furniture-grid (css/style.css:601-607) is a 2-column
+     (2fr/3fr) CSS grid, with the Jewelry Box pair further nested in its
+     own .furniture-duo sub-grid and Frames 5/6/7 in their own
+     .furniture-quad sub-grid (css/style.css:636-687) — same two-levels-
+     of-nesting shape as Beginning of the End's row-split/split-col, so
+     the same fix applies: display: contents on both wrapper classes
+     flattens them, promoting all 9 images (2 from the duo + Frames 2-8)
+     to be direct children of .furniture-grid, which switches from grid
+     to flex-direction: column. No explicit `order` is needed — the
+     wrappers' children are already in Frame 1(duo)→2→3→4→5→6→7→8 document
+     order, so flattening alone yields the correct sequence (same
+     situation as Beginning of the End, unlike Eternal Sunshine's
+     interleaved two-column markup). .furniture-endmark (the small logo
+     mark after Frame 8, not a .furniture-item) needs no change: its
+     fixed width: 150px isn't stretched by the new flex container's
+     default cross-axis stretch (an explicit width overrides that), and
+     its existing margin: 2rem auto still centers it, now along the flex
+     cross-axis instead of a grid column.
+
+     Frames 2-8 use forced aspect-ratio boxes + object-fit: cover on
+     desktop (css/style.css:619-621, 676-698) — cropping to fit the
+     bento layout's fixed shapes. That has no place in a plain vertical
+     stack, so f-full/f-narrow/f-wide/f-stack/f-tall's aspect-ratio
+     resets to auto (letting each box size to its own content instead of
+     a forced ratio) and .furniture-item img's height resets to auto
+     (letting each image render at its own natural aspect ratio inside
+     that now content-sized box — object-fit stops mattering once the
+     box and image ratios match exactly, so it's left as-is rather than
+     also overridden). The Jewelry Box duo already worked this way
+     un-conditionally (css/style.css:660-663, its own item-level img
+     rule, no aspect-ratio forcing to begin with) — this just extends
+     the same no-crop, natural-ratio treatment to Frames 2-8 for mobile.
+     .furniture-item's background/border (desktop's gray placeholder
+     frame) resets to none/none too, matching the borderless look the
+     other two series' mobile stacks already use, for one consistent
+     style across all three. */
+  .furniture-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+    /* Top padding was 2.8rem, adding an extra gap below the topbar beyond
+       .content's own margin-top: var(--topbar) (css/style.css:168-171,
+       unconditional — applies on mobile too). index.html's .slideshow
+       (css/style.css:1250-1253, mobile) uses margin-top: calc(var(--
+       topbar) + 1.6rem) — no .content wrapper involved there, so its
+       total gap is var(--topbar) + 1.6rem. Matching that here means
+       1.6rem, not 2.8rem — same fix as the desktop version of this issue
+       (css/style.css:602-616), just for the mobile breakpoint. */
+    padding: 1.6rem 1.6rem 5rem;
+  }
+
+  .furniture-duo,
+  .furniture-quad {
+    display: contents;
+  }
+
+  .furniture-item {
+    background: none;
+    border: none;
+  }
+
+  .furniture-item.f-full,
+  .furniture-item.f-narrow,
+  .furniture-item.f-wide,
+  .furniture-item.f-stack,
+  .furniture-item.f-tall {
+    aspect-ratio: auto;
+  }
+
+  .furniture-item img {
+    height: auto;
+  }
+
+  /* Jewelry Box detail image (jewelry-box-02.jpg) removed from the
+     mobile stack only — verified this exact data-src against
+     furniture-design.html:88-95 (the .furniture-item.f-detail div)
+     before writing this selector. display: none takes it out of the
+     flex layout entirely (not just visually hidden), so .furniture-
+     grid's gap doesn't leave a blank slot behind; the stack flows
+     straight from the Jewelry Box main image to Frame 2 (furniture-
+     02.jpg). Desktop's .furniture-duo (css/style.css:636-663,
+     unconditional) still shows it normally in the Jewelry Box duo —
+     this selector only matches inside this breakpoint. */
+  .furniture-item[data-src="images/jewelry-box-02.jpg"] {
+    display: none;
+  }
+
+  .img-wrap { max-width: 100%; }
+  .caption { max-width: 100%; }
+
+  .stack-item { margin-bottom: 4rem; }
+
+  .gallery-detail {
+    flex-direction: column;
+    padding: 2rem 1.5rem 5rem;
+  }
+
+  .detail-left {
+    position: static;
+    flex-direction: column;
+    margin-right: 0;
+    margin-bottom: 1.5rem;
+    width: 100%;
+  }
+
+  .thumb-col {
+    flex-direction: row;
+    width: 100%;
+    height: auto;
+    overflow-x: auto;
+    overflow-y: visible;
+    gap: 10px;
+    margin-bottom: 1rem;
+    scrollbar-width: none;
+  }
+
+  .thumb-col::-webkit-scrollbar { display: none; }
+
+  .thumb-item img { width: 72px; height: 54px; }
+
+  .detail-nav {
+    flex-direction: row;
+    justify-content: center;
+    align-self: auto;
+    gap: 1.4rem;
+    margin-left: 0;
+    margin-top: 0.5rem;
+  }
+
+  /* Topbar pages: hamburger-revealed dropdown instead of inline top-bar nav */
+  :root { --topbar: 64px; }
+
+  .topbar { padding: 0 1.6rem; }
+
+  /* Override the generic .site-name margin-bottom: 2rem set above (for the
+     non-topbar sidebar layout) — inside .topbar's flex row (align-items:
+     center) that bottom margin shifts the logo's centered box upward,
+     pulling it off the hamburger's vertical center and toward the top of
+     the bar. Scoped to body.topbar-page so it doesn't touch the sidebar
+     layout the unscoped rule serves. */
+  body.topbar-page .site-name { font-size: 1.3rem; margin-bottom: 0; }
+  /* Stepped up again (46px → 48px) for more visual weight. This is close
+     to the practical ceiling now: at 360px viewport width (the narrowest
+     width in real current use), topbar padding (1.6rem/20.8px per side)
+     leaves 318.4px available, the right-side group (.topbar-actions'
+     instagram-bar 30px + gap 8px + hamburger 30px) takes 68px, and the
+     logo's ~5.1:1 aspect ratio makes 48px tall ~245px wide — 245 + 68 =
+     313px used, only ~5px of clearance left before overlap. Still
+     positive/safe, but there's very little room for a further step
+     without either accepting overlap risk on narrow phones or shrinking
+     the instagram/hamburger group to free up more width. */
+  body.topbar-page .site-name-img { height: 48px; }
+
+  /* Hamburger bumped alongside the logo above: bigger tap target (wider
+     bars, more padding/gap) and thicker strokes so it reads at the same
+     visual weight. Overridden here rather than edited in the shared base
+     rules (css/style.css:55-77) so desktop — where .nav-toggle is
+     display:none anyway — is untouched by construction, not just by luck.
+     Re-derived the open-state X transform for the new 2px bars / 6px gap
+     (half the new 18px stack height = 9px, using 8px to match the
+     original's slightly-tighter feel) so the X still closes cleanly. At
+     320px viewport the logo (~204px) + hamburger (30px) still leaves
+     ~44px of clearance inside the topbar's available width — no overlap. */
+  .nav-toggle { gap: 6px; padding: 5px; }
+  .nav-toggle span { width: 20px; height: 2px; }
+  .nav-toggle.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+  .nav-toggle.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+  /* Instagram icon moves out of the dropdown and sits in the topbar itself,
+     immediately left of the hamburger. .topbar-actions wraps both so they
+     stay grouped together at the right edge under .topbar's
+     justify-content: space-between (rather than each being spaced out
+     independently); align-items: center keeps them on the same line as
+     each other and, via the outer .topbar's own align-items: center, as
+     the logo. Sized to 30px (vs. the desktop badge's 32px) to match the
+     hamburger's footprint and keep clearance: at a 360px viewport — the
+     narrowest width in real current use — logo (~204px) + instagram (30px)
+     + gap (8px) + hamburger (30px) still leaves ~46px free inside the
+     topbar's available width, so no overlap. */
+  .topbar-actions { display: flex; align-items: center; gap: 8px; }
+  body.topbar-page .topbar-instagram-bar { display: flex; width: 30px; height: 30px; }
+
+  /* The old dropdown mechanism (.topbar-menu shown/positioned on mobile,
+     reusing the desktop inline-nav markup) is fully retired below in
+     favor of a dedicated #mobileMenuOverlay element (see the block
+     after this one) — .topbar-menu now just stays hidden on mobile
+     always, exactly like .topbar-nav's plain (unstyled-on-mobile) state
+     before any of this work started. Desktop's own .topbar-menu rule
+     (css/style.css:98-102, unconditional, display:flex inline row) is
+     untouched — this only hides it inside the mobile breakpoint, same
+     as it always effectively was before .topbar-menu became a visible
+     dropdown. */
+  .topbar-menu { display: none; }
+
+  /* Mobile menu overlay — two fixed, side-by-side full-height columns
+     filling the full viewport while open (#mobileMenuOverlay, each
+     page's markup — DOM order is .mobile-menu-panel then .mobile-menu-
+     dim; flex-direction: row-reverse flips their VISUAL order to dim-
+     left/panel-right without needing to touch that markup or use the
+     `order` property):
+       .mobile-menu-panel  — opaque white, width: 82% (of the "~80-85%"
+                              range), full viewport height (the flex
+                              container's default align-items: stretch —
+                              never overridden here — stretches both
+                              children along the cross axis, which is now
+                              vertical since the main axis is horizontal).
+                              Sits ABOVE .topbar (z-index 700 vs 200), so
+                              it fully covers the logo/instagram/hamburger
+                              underneath — nothing from the topbar is
+                              visible while this is open. Its own close
+                              button (.mobile-menu-close, a plain X, no
+                              background/border, still top-right of the
+                              panel) is the only way to close it: the
+                              hamburger itself is now physically covered
+                              and unreachable while open.
+       .mobile-menu-dim    — flex: 1, filling whatever's left beside the
+                              82%-wide panel (~18%) — a semi-transparent
+                              black scrim (rgba, not opaque) laid directly
+                              over the real page content, which stays
+                              faintly visible through it, dimmed rather
+                              than hidden.
+     display:none by default (below, outside this media query) so
+     desktop never sees it under any circumstance; this block only
+     styles its .open state, and only inside this breakpoint. */
+  #mobileMenuOverlay.open {
+    display: flex;
+    flex-direction: row-reverse;
+    position: fixed;
+    inset: 0;
+    z-index: 700; /* above .topbar (200) and #mobileImageView (600) */
+  }
+
+  .mobile-menu-panel {
+    width: 82%;
+    flex-shrink: 0;
+    position: relative;
+    background: #fff;
+    padding: 1.6rem 2rem 2rem;
+    overflow-y: auto;
+  }
+
+  .mobile-menu-dim {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  .mobile-menu-close {
+    position: absolute;
+    top: 1.6rem;
+    right: 1.6rem;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    color: #111;
+  }
+
+  /* Nav block: left-aligned (carried over from the previous iteration,
+     not restated in the new spec but not contradicted either — flag if
+     you'd rather have it centered), stacked with an equal gap between
+     every item ("evenly spaced"), starting clear of the close button. */
+  /* margin-left shifts the nav block right of the panel's own left
+     padding (.mobile-menu-panel's 2rem) — isolated to the nav only, so
+     the close button (position: absolute, unaffected by padding/margin
+     on its siblings) and everything else about the panel stay exactly
+     as they were. */
+  .mobile-menu-nav {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2rem;
+    margin-top: 4.5rem;
+    margin-left: 2.5rem;
+  }
+
+  .mobile-menu-nav a {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 700;
+    font-size: 1.8rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: #111;
+  }
+
+  /* Current-page indicator: gray, not red/orange as in the reference. */
+  .mobile-menu-nav a.active { color: #999; }
+
+  body.topbar-page .nav-toggle { display: flex; }
+
+  /* TEST (temporary): Eternal Sunshine only, mobile only — single-column
+     full-width stack instead of the two-column masonry (the always-on
+     .series-section[data-series="eternal-sunshine"] .series-grid rule
+     around css/style.css:428, which is flex-direction: row across 2
+     .series-col children and applies at every viewport including this
+     one). Beginning of the End and Furniture are untouched — this
+     selector only matches data-series="eternal-sunshine". Remove this
+     whole block to revert to the two-column look on mobile; nothing
+     outside it is touched.
+
+     Mechanics: order only reorders siblings within the SAME flex
+     formatting context, but the two columns are separate nested flex
+     containers, so an item in col 2 can never out-rank an item in col 1
+     via order alone. display: contents on .series-col removes the
+     column's own box (and takes it out of the flex algorithm entirely)
+     so its .series-item children get promoted to be direct flex items of
+     .series-grid instead — now all 10 items are siblings in one flex
+     context. Switching .series-grid to flex-direction: column then lets
+     each item's explicit order (attr() can't be used for the numeric
+     `order` property, so these 10 rules just mirror the data-order
+     values already in the markup) place it in true 1→10 reading order
+     regardless of which column it started in. Width/spacing need no new
+     rules: .series-grid's existing gap: 1.4rem (same always-on rule)
+     now reads as vertical row-gap once the axis flips to column, and
+     .series-item's default flex sizing (align-items: stretch is the
+     .series-grid default, never overridden) already stretches each item
+     to the container's full width. Each image keeps its natural aspect
+     ratio via the existing eternal-sunshine .series-item img rule
+     (width: 100%; height: auto — untouched, no cropping). */
+  .series-section[data-series="eternal-sunshine"] .series-grid {
+    flex-direction: column;
+  }
+  .series-section[data-series="eternal-sunshine"] .series-col {
+    display: contents;
+  }
+  .series-section[data-series="eternal-sunshine"] .series-item[data-order="1"]  { order: 1; }
+  .series-section[data-series="eternal-sunshine"] .series-item[data-order="2"]  { order: 2; }
+  .series-section[data-series="eternal-sunshine"] .series-item[data-order="3"]  { order: 3; }
+  .series-section[data-series="eternal-sunshine"] .series-item[data-order="4"]  { order: 4; }
+  .series-section[data-series="eternal-sunshine"] .series-item[data-order="5"]  { order: 5; }
+  .series-section[data-series="eternal-sunshine"] .series-item[data-order="6"]  { order: 6; }
+  .series-section[data-series="eternal-sunshine"] .series-item[data-order="7"]  { order: 7; }
+  .series-section[data-series="eternal-sunshine"] .series-item[data-order="8"]  { order: 8; }
+  .series-section[data-series="eternal-sunshine"] .series-item[data-order="9"]  { order: 9; }
+  .series-section[data-series="eternal-sunshine"] .series-item[data-order="10"] { order: 10; }
+  /* END TEST: Eternal Sunshine mobile single-column stack */
+
+  /* TEST (temporary): Beginning of the End, mobile only — single-column
+     full-width stack, matching the Eternal Sunshine stack above. Doesn't
+     touch it: every selector below is scoped to
+     data-series="beginning-of-the-end" specifically.
+
+     Beginning of the End's markup nests deeper than Eternal Sunshine's
+     two flat columns — series-grid > row-3col/row-2col > series-item for
+     most rows, but series-grid > row-split > split-col > series-item for
+     Row 2 (css/style.css:461-469) — so every wrapper level needs
+     display: contents to flatten it, promoting all 16 series-item
+     elements up to be direct children of series-grid. series-grid itself
+     needs no change here (unlike Eternal Sunshine): it's already
+     flex-direction: column (css/style.css:470-474), since it was already
+     stacking rows top to bottom. No `order` rules are needed either —
+     Eternal Sunshine's two columns interleaved odd/even items, but
+     Beginning of the End's row markup already visits items 1→16 in that
+     exact document order (row-split's left split-col holds 4,5,6 before
+     its right split-col's 7,8, etc.), so flattening it alone yields the
+     correct sequence.
+
+     The desktop row layout also leans on per-item flex-grow ratios
+     (row-3col/row-2col > .series-item: flex 1 1 0; .item-large: flex 2 1
+     0 — css/style.css:541-567) to size items relative to their row-mates,
+     and on negative margin-top pixel hacks (css/style.css:509-538,
+     up to -193.9px) that pull specific rows tighter together to
+     compensate for uneven row heights. Neither makes sense with no rows
+     or row-mates left — flex-basis: 0 would fight the image's natural
+     aspect ratio for height, and the negative margins would pull images
+     up into the ones above them. Both reset to neutral (flex: 0 1 auto,
+     matching how Eternal Sunshine's items are left un-flexed; margin-top:
+     0) for these specific items only. .split-col.col-large's own
+     flex/margin-top hack needs no reset: it's one of the collapsed
+     wrapper levels above, so display: contents already removes its box
+     — and with it, any effect its own properties could have — on its
+     own.
+
+     Width/spacing/aspect-ratio need no new rules, same as Eternal
+     Sunshine: series-grid's existing gap: 1.4rem (same value used there)
+     already spaces the promoted items, default flex stretch already
+     fills each to full width, and the existing shared
+     .series-item img { width: 100%; height: auto } rule
+     (css/style.css:448-452) keeps every image at its natural aspect
+     ratio — no cropping. */
+  .series-section[data-series="beginning-of-the-end"] .row-3col,
+  .series-section[data-series="beginning-of-the-end"] .row-2col,
+  .series-section[data-series="beginning-of-the-end"] .row-split,
+  .series-section[data-series="beginning-of-the-end"] .split-col {
+    display: contents;
+  }
+  .series-section[data-series="beginning-of-the-end"] .row-3col > .series-item,
+  .series-section[data-series="beginning-of-the-end"] .row-2col > .series-item {
+    flex: 0 1 auto;
+  }
+  .series-section[data-series="beginning-of-the-end"] .row-2col > .series-item.item-large {
+    flex: 0 1 auto;
+  }
+  .series-section[data-series="beginning-of-the-end"] .series-item[data-order="12"],
+  .series-section[data-series="beginning-of-the-end"] .series-item[data-order="13"],
+  .series-section[data-series="beginning-of-the-end"] .series-item[data-order="15"] {
+    margin-top: 0;
+  }
+  /* END TEST: Beginning of the End mobile single-column stack */
+
+  /* Mobile fullscreen image view — the ON state, mobile only (see the
+     unconditional #mobileImageView { display: none; } base rule above,
+     which this overrides only inside this breakpoint). One shared
+     overlay reused for every image in both Eternal Sunshine and
+     Beginning of the End's mobile single-column stacks (js/main.js
+     populates .mobile-image-view-img / .detail-title / .detail-meta
+     per tap). Fixed, full-viewport, opaque white background so the
+     topbar (name logo + hamburger) sitting behind it in the DOM is
+     fully covered, not just scrolled past — no need to touch .topbar
+     itself. Scoped entirely to #mobileImageView/.mobile-image-view-*
+     selectors, so nothing here can affect the shared #gallery-detail
+     viewer, Furniture, or desktop.
+
+     Was display: flex; flex-direction: column — with .mobile-image-view-
+     img-wrap set to width: 100%; display: flex; justify-content: center,
+     which centered the IMAGE inside a full-width box but left the
+     caption (.detail-info, width: 100% — shared with the desktop viewer,
+     css/style.css:923) spanning that same full-width box starting at its
+     true left edge (0). Those two "left edges" only coincide when an
+     image happens to render at the full container width; any image
+     capped by max-height: 65vh instead of max-width (anything with a
+     less-wide aspect ratio) renders narrower and sits centered with a
+     left margin — while the caption stayed flush left. That's the
+     inconsistency: full-bleed-width images looked fine, less-wide ones
+     didn't.
+
+     Fix: display: grid with a single minmax(0, max-content) column
+     (justify-content: center to still center the block within the
+     overlay, the same technique the desktop shared viewer uses for
+     .detail-main, css/style.css:849-866, kept independent here rather
+     than reused directly). .mobile-image-view-back stays position:
+     absolute, so it's excluded from grid placement — the remaining two
+     in-flow children (.mobile-image-view-img-wrap, .detail-info) become
+     that column's only two cells, each row-stacked. img-wrap is now
+     width: fit-content (hugs the image's actual rendered size instead of
+     stretching full-width-then-centering-inside), so the column's width
+     tracks the image; .detail-info's existing width: 100% then fills
+     that SAME column width — both cells' left edges are the grid area's
+     left edge, so they always align regardless of the image's aspect
+     ratio. minmax(0, ...)'s 0 minimum still lets the column shrink below
+     a long caption line's natural width when the overlay doesn't have
+     room for it (same reasoning as the desktop rule's comment), so long
+     medium/dimensions text wraps instead of overflowing off-screen. */
+  #mobileImageView.open {
+    display: grid;
+    grid-template-columns: minmax(0, max-content);
+    justify-content: center;
+    position: fixed;
+    inset: 0;
+    z-index: 600; /* above .topbar (200) and .gallery-detail's default stacking */
+    background: #fff;
+    padding: 4.5rem 1.6rem 2.5rem;
+    overflow-y: auto;
+  }
+
+  /* Icon size tracks font-size (the SVGs in index.html/furniture-
+     design.html are width/height: 1em) — bumped from 1.4rem to 1.8rem,
+     and the button's own box grown to match (36px → 42px), so the now-
+     larger arrow still sits comfortably centered with room around it. */
+  .mobile-image-view-back {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #111;
+    font-size: 1.8rem;
+    padding: 0;
+  }
+
+  .mobile-image-view-img-wrap {
+    width: fit-content;
+    margin-bottom: 1.4rem;
+  }
+
+  .mobile-image-view-img {
+    /* calc(), not a percentage: this wrap is width: fit-content (an
+       indefinite size for percentage-resolution purposes), so a
+       percentage max-width here would resolve against nothing definite
+       (same trap the desktop .detail-img/.detail-img-wrap pair works
+       around, css/style.css:893-905, just solved differently here) —
+       calc(100vw - 3.2rem) mirrors #mobileImageView.open's 1.6rem
+       left+right padding directly, independent of the wrap's own sizing. */
+    max-width: calc(100vw - 3.2rem);
+    max-height: 65vh;
+    width: auto;
+    height: auto;
+    display: block;
+  }
+
+  /* Center every caption (.detail-info: title/year/medium/dimensions) in
+     the mobile fullscreen view — generalized from the eternal-sunshine-
+     08.jpg-only test above (now removed) once that confirmed the
+     approach. #mobileImageView is the one shared overlay used for every
+     image across all three sections (Eternal Sunshine, Beginning of the
+     End — painting.html — and Furniture, including the Jewelry Box's 2
+     visible frame images — furniture-design.html; see js/main.js's
+     shared ITEM_SELECTOR/openFor()), so a plain descendant selector here
+     — no per-image :has() needed anymore — covers every one of them
+     automatically. */
+  #mobileImageView .detail-info {
+    text-align: center;
+  }
+}
+
+@media (min-width: 1400px) {
+  .gallery-stack { padding: 38px 7rem 10rem; }
+  .cv-wrap { padding: 0 7cm 10rem; }
+  .series-landing { padding: 0 7cm 10rem; }
+  .furniture-grid { padding: 0 7cm 10rem; }
+  .contact-wrap { padding: 0 7cm 10rem 7.5cm; }
+}

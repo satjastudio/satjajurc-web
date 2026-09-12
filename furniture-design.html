@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Furniture Design — Satja Jurc</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Abel&display=block" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@1,700&display=block" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="topbar-page furniture-page">
+
+  <header class="topbar">
+    <a href="index.html" class="site-name"><img src="images/name-logo-v2-cropped.png" alt="Satja Jurc" class="site-name-img"></a>
+
+    <div class="topbar-menu">
+      <nav class="topbar-nav">
+        <a href="index.html">Home</a>
+        <a href="painting.html">Work</a>
+        <a href="furniture-design.html" class="active">Furniture</a>
+        <a href="cv.html">About</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <a href="https://www.instagram.com/forbidden_mantra" target="_blank" rel="noopener" class="topbar-instagram" aria-label="Instagram">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+        </svg>
+      </a>
+    </div>
+
+    <div class="topbar-actions">
+      <a href="https://www.instagram.com/forbidden_mantra" target="_blank" rel="noopener" class="topbar-instagram topbar-instagram-bar" aria-label="Instagram">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+        </svg>
+      </a>
+      <button class="nav-toggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile-only menu overlay: white panel (~top 80vh) with a close X
+       and the nav links, dimmed page content below it (~bottom 20vh).
+       Fully covers the topbar (logo/instagram/hamburger) while open —
+       see css/style.css's max-width: 700px #mobileMenuOverlay rules and
+       js/main.js's nav-toggle IIFE (toggles this element's .open class
+       alongside .topbar's). -->
+  <div class="mobile-menu-overlay" id="mobileMenuOverlay" aria-hidden="true">
+    <div class="mobile-menu-panel">
+      <button class="mobile-menu-close" aria-label="Close menu">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <nav class="mobile-menu-nav">
+        <a href="index.html">Home</a>
+        <a href="painting.html">Work</a>
+        <a href="furniture-design.html" class="active">Furniture</a>
+        <a href="cv.html">About</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+    <div class="mobile-menu-dim"></div>
+  </div>
+
+  <main class="content">
+
+    <div class="furniture-grid" id="furniture-grid">
+      <!-- Frame 1: Jewelry Box group — row 1, two-image duo (main +
+           detail), matching the Rae Klein reference style. Main uses
+           the ORIGINAL uncropped (portrait) photo, not the 3:2-cropped
+           version, since it now sits in a narrower vertical slot where
+           the portrait orientation reads naturally. -->
+      <div class="furniture-duo">
+        <div class="furniture-item f-main"
+             data-group="jewelry-box"
+             data-src="images/jewelry-box-01.jpg"
+             data-title="Jewelry Box"
+             data-year="2023"
+             data-medium="Dark Walnut and brass">
+          <img src="images/jewelry-box-01.jpg" alt="Jewelry Box">
+        </div>
+        <div class="furniture-item f-detail"
+             data-group="jewelry-box"
+             data-src="images/jewelry-box-02.jpg"
+             data-title="Jewelry Box (detail)"
+             data-year="2023"
+             data-medium="Dark Walnut and brass">
+          <img src="images/jewelry-box-02.jpg" alt="Jewelry Box (detail)">
+        </div>
+      </div>
+
+      <!-- Frame 2: Lamps/Wood — row 2, full width -->
+      <div class="furniture-item f-full"
+           data-group="lamps-wood"
+           data-src="images/furniture-02.jpg"
+           data-title="Midas Room"
+           data-year="2022"
+           data-medium="Wooden furniture and paper mâché lamps">
+        <img src="images/furniture-02.jpg" alt="Midas Room">
+      </div>
+
+      <!-- Frame 3: row 3, col 1, narrow (40%) -->
+      <div class="furniture-item f-narrow"
+           data-group="lamps-wood"
+           data-src="images/furniture-03.jpg"
+           data-title="Bedside Table"
+           data-year="2022"
+           data-medium="Dark walnut">
+        <img src="images/furniture-03.jpg" alt="Bedside Table">
+      </div>
+
+      <!-- Frame 4: row 3, col 2, wide (60%) -->
+      <div class="furniture-item f-wide"
+           data-group="lamps-wood"
+           data-src="images/furniture-04.jpg"
+           data-title="Puzzle Box Altair"
+           data-year="2022"
+           data-medium="Dark walnut and brass">
+        <img src="images/furniture-04.jpg" alt="Puzzle Box Altair">
+      </div>
+
+      <!-- Frames 5, 6, 7: left column = 5 stacked over 6 (each half-height,
+           forced to match via the sub-grid's 1fr/1fr rows); right column =
+           7, tall, spanning the same total height as 5+6 combined -->
+      <div class="furniture-quad">
+        <div class="furniture-item f-stack"
+             data-group="lamps-wood"
+             data-src="images/furniture-05.jpg"
+             data-title="Small Paper Mâché Lamp"
+             data-year="2022"
+             data-medium="Paper mâché and wooden sticks">
+          <img src="images/furniture-05.jpg" alt="Small Paper Mâché Lamp">
+        </div>
+        <div class="furniture-item f-stack"
+             data-group="lamps-wood"
+             data-src="images/furniture-06.jpg"
+             data-title="Big Paper Mâché Lamp"
+             data-year="2022"
+             data-medium="Paper mâché and wooden sticks">
+          <img src="images/furniture-06.jpg" alt="Big Paper Mâché Lamp">
+        </div>
+        <div class="furniture-item f-tall"
+             data-group="lamps-wood"
+             data-src="images/furniture-07.jpg"
+             data-title="The Thinker"
+             data-year="2022"
+             data-medium="Human-sized paper mâché installation">
+          <img src="images/furniture-07.jpg" alt="The Thinker">
+        </div>
+      </div>
+
+      <!-- Frame 8: row 6, full width -->
+      <div class="furniture-item f-full"
+           data-group="lamps-wood"
+           data-src="images/furniture-08.jpg"
+           data-title="Variety of Paper Mâché Lamps"
+           data-year="2022"
+           data-medium="Paper mâché and wooden sticks">
+        <img src="images/furniture-08.jpg" alt="Variety of Paper Mâché Lamps">
+      </div>
+
+      <!-- Row 7: small centered logo mark — not clickable, not part of
+           either viewer group (no data-group, not a .furniture-item) -->
+      <div class="furniture-endmark">
+        <img src="images/logo-mark.png" alt="Satja Jurc logo mark">
+      </div>
+    </div>
+
+    <!-- Extra images for the Jewelry Box's own set — not separate grid
+         frames, just additional thumbnails scoped to that same group,
+         enough to exercise the thumbnail column's scroll behavior.
+         (jewelry-box-02.jpg / "Jewelry Box (open)" removed from here —
+         it's now the visible detail frame above, so keeping it here too
+         would duplicate that same photo in the viewer's thumbnail strip.) -->
+    <div class="furniture-extra" hidden>
+      <div class="furniture-item"
+           data-group="jewelry-box"
+           data-src="images/jewelry-box-03.jpg"
+           data-title="Jewelry Box (interior)"
+           data-year="2023"
+           data-medium="Dark Walnut and brass">
+        <img src="images/jewelry-box-03.jpg" alt="Jewelry Box (interior)">
+      </div>
+      <div class="furniture-item"
+           data-group="jewelry-box"
+           data-src="images/jewelry-box-04.jpg"
+           data-title="Jewelry Box (Extra Details)"
+           data-year="2023"
+           data-medium="Dark Walnut and brass">
+        <img src="images/jewelry-box-04.jpg" alt="Jewelry Box (Extra Details)">
+      </div>
+      <div class="furniture-item"
+           data-group="jewelry-box"
+           data-src="images/jewelry-box-05.jpg"
+           data-title="Jewelry Box (Front View)"
+           data-year="2023"
+           data-medium="Dark Walnut and brass">
+        <img src="images/jewelry-box-05.jpg" alt="Jewelry Box (Front View)">
+      </div>
+    </div>
+
+    <div class="gallery-detail" id="gallery-detail">
+      <div class="detail-left">
+        <div class="thumb-col"></div>
+        <div class="detail-nav">
+          <button class="nav-arrow nav-prev"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+          <button class="nav-close"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+          <button class="nav-arrow nav-next"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></button>
+        </div>
+      </div>
+      <div class="detail-main">
+        <div class="detail-img-wrap">
+          <img class="detail-img" src="" alt="">
+        </div>
+        <div class="detail-info">
+          <p class="detail-title"></p>
+          <p class="detail-meta detail-year"></p>
+          <p class="detail-meta detail-medium"></p>
+          <p class="detail-meta detail-dimensions"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile-only fullscreen image view: tap any image in the Furniture
+         mobile single-column stack to open it here — topbar hidden, image
+         full-width/contained, caption below, single back arrow to return
+         to the same scroll position. Same shared block/logic as
+         painting.html (Eternal Sunshine / Beginning of the End) — see
+         js/main.js's "Mobile fullscreen image view" IIFE (ITEM_SELECTOR
+         now also matches #furniture-grid .furniture-item) and
+         css/style.css's max-width: 700px #mobileImageView rules, neither
+         of which is page-scoped, so this markup is all that's needed to
+         extend the same feature here. Fully separate from the shared
+         #gallery-detail viewer above (desktop's lightbox/viewer code,
+         untouched). -->
+    <div class="mobile-image-view" id="mobileImageView" aria-hidden="true">
+      <button class="mobile-image-view-back" aria-label="Back">
+        <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      </button>
+      <div class="mobile-image-view-img-wrap">
+        <img class="mobile-image-view-img" src="" alt="">
+      </div>
+      <div class="detail-info">
+        <p class="detail-title"></p>
+        <p class="detail-meta"></p>
+        <p class="detail-meta"></p>
+        <p class="detail-meta"></p>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
